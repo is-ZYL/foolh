@@ -24,7 +24,6 @@ public class FoolLibrarySeas extends BasePojo {
 	
 	
 	
-	
 	public String getFoolTitle() {
 		return foolTitle;
 	}

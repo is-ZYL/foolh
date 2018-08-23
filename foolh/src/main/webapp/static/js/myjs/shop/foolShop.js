@@ -276,7 +276,6 @@ function gotoByAjax(page, rows, type) {
 			menuList.total = d.total;
 			pageInfo = d;
 			total = d.total;
-			rows = $("#changeCount").val();
 			list = d.list;
 			build_page_nav(d);
 			$("#changeCount").val(rows);
@@ -479,32 +478,31 @@ var menuList = new Vue({
 			// 拼接
 			return year + "-" + month + "-" + day + " " + hours + ":" + minutes
 					+ ":" + seconds;
-		},//更改店铺的审核状态
+		},//更改店铺的审核状态  0未审核   1已审核
 		changeShopStatus:function(shopStatus,id,e){
-			console.log(e.currentTarget); 
-            console.log(e.target);
+		 layer.confirm('确认更改审核状态？', function(index){
 			$.ajax({
 				url:projectName+"/foolshop/changeShopStatus",
 				data:{"shopStatus":shopStatus,"id":id},
 				type:"post",
 				success:function(data){
+					var el = e.target ;
 					layer.msg("审核状态更新成功",{icon:6})
-					if (shopStatus == 1) {
-						 var el = e.target ;
-						 $(el).text("未审核");
-						 $(el).addClass("btn-danger");
-						 $(el).removeClass("btn-primary");
-					}else if (shopStatus == 0){
-						 var el = e.target ;
-						 $(el).text("已审核");
-						 $(el).removeClass("btn-danger");
-						 $(el).addClass("btn-primary");
+					if ($(el).text() == "未审核") {
+						$(el).text("已审核");
+						$(el).removeClass("btn-danger");
+						$(el).addClass("btn-primary");
+					}else if ($(el).text() == "已审核"){
+						$(el).text("未审核");
+						$(el).addClass("btn-danger");
+						$(el).removeClass("btn-primary");
 					}
 				},error:function(){
 					layer.msg("审核状态更新失败",{icon:5})
 				}
 				
 			})
+			 })
 		}
 	}
 

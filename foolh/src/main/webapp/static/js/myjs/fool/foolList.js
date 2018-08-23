@@ -17,8 +17,6 @@ var foolIdBySeas;//材料id
 var keywords="", created="", is_check="", foolId=0,foolShopId=0;
 
 $(function(){
-	//
-	$("#changeCount").val(rows);
 	$("#ImgModal").modal("hide");
 })
 
@@ -237,7 +235,6 @@ function gotoByAjax(page, rows, type) {
 			menuList.total=d.total;;
 			pageInfo = d;
 			total = d.total;
-			rows = $("#changeCount").val();
 			list = d.list;
 			build_page_nav(d);
 			$("#changeCount").val(rows);

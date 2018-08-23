@@ -10,6 +10,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.fh.controller.base.BaseController;
 import com.fh.lw.pojo.Jianyi;
@@ -28,6 +29,7 @@ import com.fh.lw.service.HelpService;
 import com.fh.lw.service.JinyanService;
 import com.fh.lw.service.RedisService;
 import com.fh.lw.service.UserWxService;
+import com.github.pagehelper.PageInfo;
 
 /**
  * 建议
@@ -84,12 +86,11 @@ public class JianyiController extends BaseController{
 	 * @return
 	 */
 	@RequestMapping(value = "getJianyiList", method = RequestMethod.GET)
-	public ResponseEntity<List<Jianyi>> getJianyiList() {
+	public ResponseEntity<PageInfo<Jianyi>> getJianyiList(@RequestParam("allInfo") String [] allInfo) {
 		try {
-
-			List<Jianyi> queryAll = this.jinyanService.queryAll();
+			PageInfo<Jianyi> list = this.jinyanService.getJianyiByKeywordsAndOtherInfo(allInfo);
 			// 查看
-			return ResponseEntity.ok(queryAll);
+			return ResponseEntity.ok(list);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
