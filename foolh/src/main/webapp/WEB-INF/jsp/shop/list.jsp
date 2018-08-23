@@ -73,6 +73,13 @@
 										<option value="7">其它</option>
 									</select>
 								</td>
+								<td style="vertical-align:top;padding-left:2px;">
+								 	<select class="nav-search-input" name="status" id="status" title="请选择状态"  style="border: 1px solid #6fb3e0;border-radius: 4px !important;" onchange="gotoByAjax(page,rows,100);">
+										<option selected="selected" value="">全部</option>
+										<option value="0">未审核</option>
+										<option value="1">已审核</option>
+									</select>
+								</td>
 								
  								<td style="vertical-align:top;padding-left:2px;"><a class="btn btn-light btn-xs" onclick="gotoByAjax(page, rows, 100);" title="检索"><i id="nav-search-icon" class="ace-icon fa fa-search bigger-110 nav-search-icon blue"></i></a></td>
 								
@@ -95,13 +102,13 @@
 											<th class='center'>店铺老板/联系方式</th>
 											<th class='center'>店铺老板</th>
 											<th class='center'>店铺地址</th>
-											<th class='center'>店铺详情介绍</th>
+											<th class='center'>店铺介绍</th>
 											<th class='center'>创建时间</th>
 											<th class='center'>店铺类别</th>  
 											<!-- 只有饭店才能有下面两项选项 -->
 											<th class='center' >店铺私房菜</th> 
-											<th class='center' >绑定的所有店铺</th> 
-											<th class='center' >审核状态</th> 
+											<th class='center' >绑定店铺</th> 
+											<th class='center'style="width:75px;" >审核状态</th> 
 											<th class='center' style="width: 120px;">操作</th>
 										</tr>
 									</thead>
@@ -135,8 +142,8 @@
 											<td calss="center" style="text-align: center;" v-if="ser.shopType !=1">无</td>
 											<!-- 查看绑定的所有店铺 -->
 											<td calss="center" style="text-align: center;"><a class="glyphicon glyphicon-eye-open" @click="getBindShopByShopId(ser.id)" title="查看绑定店铺详情" ></a></td>
-											<td calss="center " style="text-align: center;width:60px" v-if="ser.shopStatus == 1" @click="changeShopStatus(ser.shopStatus,ser.id,$event)"><a class="btn btn-mini btn-primary" title="更改审核状态">已审核</a></td>
-											<td calss="center red" style="text-align: center;width:60px"  v-if="ser.shopStatus == 0" @click="changeShopStatus(ser.shopStatus,ser.id,$event)"><a class="btn btn-mini btn-danger"  title="更改审核状态">未审核</a></td>
+											<td calss="center" style="text-align: center;width:60px" v-if="ser.shopStatus == 1" @click="changeShopStatus(ser.shopStatus,ser.id,$event)"><a class="btn btn-mini btn-primary" title="更改审核状态">已审核</a></td>
+											<td calss="center" style="text-align: center;width:60px"  v-if="ser.shopStatus == 0" @click="changeShopStatus(ser.shopStatus,ser.id,$event)"><a class="btn btn-mini btn-danger"  title="更改审核状态">未审核</a></td>
 											<td class='center'>
 												<div class="hidden-sm hidden-xs action-buttons">
 													<a class="green" @click="editshop(ser.id)"> <i

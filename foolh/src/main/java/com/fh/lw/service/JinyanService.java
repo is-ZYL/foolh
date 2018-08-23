@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import com.fh.lw.mapper.FoolLibraryMenuMapper;
 import com.fh.lw.mapper.JianyiMapper;
 import com.fh.lw.pojo.FoolLibraryMenu;
+import com.fh.lw.pojo.FoolShop;
 import com.fh.lw.pojo.Jianyi;
 import com.github.abel533.entity.Example;
 import com.github.abel533.entity.Example.Criteria;
@@ -42,7 +43,7 @@ public class JinyanService extends BaseService<Jianyi> {
 	public PageInfo<Jianyi> getListMenu(Integer page, Integer rows) {
 		PageHelper.startPage(page, rows);
 		Jianyi jianyi = new Jianyi();
-		List<Jianyi> flist = this.jianyi.queryListByWhereASC(jianyi);
+		List<Jianyi> flist = this.jianyi.queryListByWhereDesc(jianyi);
 		return new PageInfo<Jianyi>(flist);
 	}
 	
@@ -52,7 +53,7 @@ public class JinyanService extends BaseService<Jianyi> {
 		if ("".equals(allInfo[3]) && "".equals(allInfo[4])&& "".equals(allInfo[5])) {
 			return this.jianyi.getListMenu(Integer.parseInt(allInfo[0]), Integer.parseInt(allInfo[1]));
 		}else {
-			Example example = new Example(FoolLibraryMenu.class);
+			Example example = new Example(Jianyi.class);
 			PageHelper.startPage(Integer.parseInt(allInfo[0]), Integer.parseInt(allInfo[1]));
 			Criteria criteria = example.createCriteria();
 			//[ page, rows, type, jianYiTitle, is_check, created];
@@ -64,14 +65,25 @@ public class JinyanService extends BaseService<Jianyi> {
 			if (!"".equals(allInfo[4])) {
 				criteria.andEqualTo("propIsCheck", allInfo[4]);
 			}
-			//菜品创建时间
+			//创建时间
 			if (!"".equals(allInfo[5])) {
 				criteria.andLike("created", "%" +allInfo[5]+ "%");
 			}
-			example.setOrderByClause("created ASC");
+			example.setOrderByClause("created DESC");
 			List<Jianyi> list = this.jianYiMapper.selectByExample(example);
 			return new PageInfo<>(list);
 		}
 	}
+
+
+	public Integer changeJianyiStatus(Jianyi jianyi) {
+		if (jianyi.getPropIsCheck() == 1) {
+			jianyi.setPropIsCheck(0);
+		} else {
+			jianyi.setPropIsCheck(1);
+		}
+		return super.updateSelective(jianyi);
+	}	
+		
 
 }

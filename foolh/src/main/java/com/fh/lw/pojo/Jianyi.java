@@ -60,4 +60,10 @@ public class Jianyi extends BasePojo {
 		this.propIsCheck = propIsCheck;
 	}
 
+	@Override
+	public String toString() {
+		return "Jianyi [id=" + id + ", propAddUserId=" + propAddUserId + ", propTitle=" + propTitle + ", propMsg="
+				+ propMsg + ", propIsCheck=" + propIsCheck + "]";
+	}
+
 }

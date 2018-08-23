@@ -33,16 +33,17 @@ import com.github.pagehelper.PageInfo;
 
 /**
  * 建议
+ * 
  * @author yuanyuana
  *
- * 2018年7月28日 下午1:33:03
+ *         2018年7月28日 下午1:33:03
  */
 
 @CrossOrigin(origins = "http://127.0.0.1", maxAge = 3600)
 @Controller
 @RequestMapping("jianyi")
-public class JianyiController extends BaseController{
-	
+public class JianyiController extends BaseController {
+
 	@Autowired(required = true)
 	private RedisService rService;
 	private static final ObjectMapper MAPPER = new ObjectMapper();
@@ -77,8 +78,6 @@ public class JianyiController extends BaseController{
 	@Autowired
 	private FoolUserLogService foolUserLogService;
 
-	
-
 	/**
 	 * 
 	 * 获取所有的建议
@@ -86,7 +85,7 @@ public class JianyiController extends BaseController{
 	 * @return
 	 */
 	@RequestMapping(value = "getJianyiList", method = RequestMethod.GET)
-	public ResponseEntity<PageInfo<Jianyi>> getJianyiList(@RequestParam("allInfo") String [] allInfo) {
+	public ResponseEntity<PageInfo<Jianyi>> getJianyiList(@RequestParam("allInfo") String[] allInfo) {
 		try {
 			PageInfo<Jianyi> list = this.jinyanService.getJianyiByKeywordsAndOtherInfo(allInfo);
 			// 查看
@@ -103,12 +102,13 @@ public class JianyiController extends BaseController{
 	 * 
 	 * @return
 	 */
-	@RequestMapping(value = "updateJianyiById", method = RequestMethod.POST)
-	public ResponseEntity<Void> updateJianyiById(Jianyi jy) {
+	@RequestMapping(value = "changeJianyiStatus", method = RequestMethod.POST)
+	public ResponseEntity<Void> changeJianyiStatus(Jianyi jianyi) {
 		try {
-			this.jinyanService.updateSelective(jy);
-			// 修改建议状态
-			return ResponseEntity.status(HttpStatus.RESET_CONTENT).build();
+			// 通过id获取店铺
+			this.jinyanService.changeJianyiStatus(jianyi);
+			// 查看
+			return ResponseEntity.status(HttpStatus.OK).build();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -116,5 +116,40 @@ public class JianyiController extends BaseController{
 		return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
 	}
 
-	
+	/**
+	 * 批量删除建议数据
+	 * 
+	 * @return
+	 */
+	@RequestMapping(value = "delJianyis", method = RequestMethod.POST)
+	public ResponseEntity<Void> delJianyis(@RequestParam("ids") String ids) {
+		try {
+			if (this.jinyanService.deleteByIds(ids))
+				// 查看
+				return ResponseEntity.status(HttpStatus.OK).build();
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		// 出错500
+		return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+	}
+
+	/**
+	 * 删除建议数据
+	 * 
+	 * @return
+	 */
+	@RequestMapping(value = "delJianyi", method = RequestMethod.POST)
+	public ResponseEntity<Void> delJianyi(Jianyi jianyi) {
+		try {
+			if (this.jinyanService.deleteByWhere(jianyi) > 0)
+				return ResponseEntity.status(HttpStatus.OK).build();
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		// 出错500
+		return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+	}
 }

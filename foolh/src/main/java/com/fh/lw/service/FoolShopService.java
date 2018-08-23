@@ -104,9 +104,9 @@ public class FoolShopService extends BaseService<FoolShop> {
 	 * @return
 	 */
 	public PageInfo<FoolShop> getListShopByKeywordsAndOtherInfo(String[] allInfo) {
-		// [page,rows,type,foolTitle,is_check,created,shopId,addUser];
-		if ("".equals(allInfo[3]) && "0".equals(allInfo[4]) && "".equals(allInfo[5]) && "0".equals(allInfo[6])
-				&& "".equals(allInfo[7])) {
+		// [page,rows,type,foolTitle,is_check,created,shopId,addUser,status];
+		if ("".equals(allInfo[3]) && "0".equals(allInfo[4]) && "".equals(allInfo[5]) && "0".equals(allInfo[6]) && "".equals(allInfo[7])
+				&& "".equals(allInfo[8])) {
 			return this.getShopList(Integer.parseInt(allInfo[0]), Integer.parseInt(allInfo[1]),
 					Integer.parseInt(allInfo[2]));
 		} else {
@@ -132,6 +132,10 @@ public class FoolShopService extends BaseService<FoolShop> {
 			// 根据老板进行查找
 			if (!"".equals(allInfo[7])) {
 				criteria.andLike("shopBossName", "%" + allInfo[7] + "%");
+			}
+			// 根据审核状态进行查找
+			if (!"".equals(allInfo[8])) {
+				criteria.andEqualTo("shopStatus", allInfo[8]);
 			}
 
 			example.setOrderByClause("created ASC");
@@ -337,13 +341,13 @@ public class FoolShopService extends BaseService<FoolShop> {
 	 * @param shopStatus
 	 * @param f
 	 */
-	public void changeShopStatus(Integer shopStatus,Long id) {
+	public Integer changeShopStatus(Integer shopStatus,Long id) {
 		FoolShop f = super.queryById(id);
 		if (shopStatus == 1) {
 			f.setShopStatus(0);
 		} else {
 			f.setShopStatus(1);
 		}
-		super.updateSelective(f);
+		return super.updateSelective(f);
 	}
 }

@@ -10,29 +10,16 @@ var total = 0;
 var list = []; // 店铺list数据
 var diag;// 弹窗
 // 设置关键字搜索初始默认值 店铺名，店铺创建时间，店铺类型，店铺ID，店铺老板名称/手机号
-var jianYiTitle = "", created = "", is_check = "";
-var sendShopId;//配送店铺id
-var bindShopId;//绑定店铺id
+var helpTitle = "", created = "", is_check = "";
 $(top.hangge());
-
-
-$(function(){
-	//设置模态框隐藏时，所有数据清零，防止数据错误
-	$("#shopModal").on('hide.bs.modal', function () {
-		shopModal.shopList=[];
-	});
-	$("#bindShopModal").on('hide.bs.modal', function () {
-		bindShopModal.shopList=[];
-	});
-})
 /**
  * 批量删除店铺
  * 
  * @returns
  */
-function delJianyis() {
+function delHelps() {
 	if (!$(":input[name='ids']").is(":checked")) {
-		layer.msg("未选择任何建议", {
+		layer.msg("未选择任何帮助", {
 			icon : 6
 		});
 		$("#zcheckbox").tips({
@@ -42,13 +29,13 @@ function delJianyis() {
 			time : 2
 		});
 	} else {
-		layer.confirm("确定要删除选中建议吗?", function(result) {
+		layer.confirm("确定要删除选中帮助吗?", function(result) {
 			let ids = [];
-			$("#jianYiList").find(":input[name='ids']:checked").each(function() {
+			$("#helpList").find(":input[name='ids']:checked").each(function() {
 				ids.push($(this).val());
 			})
 			if (result && ids.length != 0) {
-				var url = projectName + "/jianyi/delJianyis?ids=" + ids;
+				var url = projectName + "/help/delHelps?ids=" + ids;
 				$.ajax({
 					url : url,
 					type : "post",
@@ -84,32 +71,22 @@ function build_page_nav(result) {
 		var lastPage = $("<li></li>").append($("<a></a>").append("末页"));
 		// 跳转页面的输入框
 		var inputNums = $("<li></li>")
-				.append(
-						$(
-								"<input type='number' id='toGoPage' style='width:55px;height:34px;text-align:center;margin-top:1px' min='1' placeholder='页码'/>")
-								.append("末页"));
+				.append($("<input type='number' id='toGoPage' style='width:55px;height:34px;text-align:center;margin-top:1px' min='1' placeholder='页码'/>")
+				.append("末页"));
 		// 跳转页面的按钮
 		var inputNumsButton = $("<li></li>")
-				.append(
-						$(
-								"<a style='float:right;height:34px;' class='btn btn-mini btn-success' onclick='gotoPage();'></a>")
-								.append("跳转"));
+				.append($("<a style='float:right;height:34px;' class='btn btn-mini btn-success' onclick='gotoPage();'></a>")
+				.append("跳转"));
 		// 总共条数
 		var totalInfo = $("<li></li>").append(
-				$("<a></a>").append("共").append(
-						$("<font color='red'>" + result.total + "</font>"))
+				$("<a></a>").append("共").append($("<font color='red'>" + result.total + "</font>"))
 						.append("条"));
 		// 总共页数
-		var pageNumsInfo = $("<li></li>").append(
-				$("<a></a>").append("共" + result.pages + "页"));
+		var pageNumsInfo = $("<li></li>").append($("<a></a>").append("共" + result.pages + "页"));
 		// 每页显示条数选择框
 		var pageSizeChoose = $("<li></li>")
-				.append(
-						$(
-								"<select title='显示条数'  id='changeCount' style='margin-left:1px;height:34px;'  onchange='changeCount(this.value)'></select>")
-								.append(
-										"<option selected='selected' value='10'>10</option><option value='20'>20</option><option value='30'>30</option><option value='40'>40</option><option value='50'>50</option><option value='60'>60</option><option value='70'>70</option><option value='80'>80</option><option value='90'>90</option><option value='100'>100</option>"));
-
+				.append($("<select title='显示条数'  id='changeCount' style='margin-left:1px;height:34px;'  onchange='changeCount(this.value)'></select>")
+				.append("<option selected='selected' value='10'>10</option><option value='20'>20</option><option value='30'>30</option><option value='40'>40</option><option value='50'>50</option><option value='60'>60</option><option value='70'>70</option><option value='80'>80</option><option value='90'>90</option><option value='100'>100</option>"));
 		var ul = $("#pageNums");
 		// 先清空之前的数据
 		ul.empty();
@@ -212,17 +189,17 @@ function gotoByAjax(page, rows, type) {
 	});
 	var searchType = $("#searchType").val();
 	if (searchType == 0) {
-		jianYiTitle = $("#jianYiTitle").val().length == 0 ? "" : $("#jianYiTitle").val();
+		helpTitle = $("#helpTitle").val().length == 0 ? "" : $("#helpTitle").val();
 		// 获取过后将其他关键字值进行初始化
 		created = "";
 	} else if (searchType == 1) {
 		created = $("#created").val().length == 0 ? "" : $("#created").val();
-		jianYiTitle = "";
+		helpTitle = "";
 	} 
 	is_check = $("#is_check").val();
-	var allInfo = [ page, rows, type, jianYiTitle, is_check, created];
+	var allInfo = [ page, rows, type, helpTitle, is_check, created];
 	$.ajax({
-		url : projectName + '/jianyi/getJianyiList?allInfo=' + allInfo,
+		url : projectName + '/help/getHelpList?allInfo=' + allInfo,
 		type : 'GET',
 		success : function(d) {
 			layer.close(index);
@@ -288,11 +265,11 @@ var menuList = new Vue({
 			return year + "-" + month + "-" + day + " " + hours + ":" + minutes
 					+ ":" + seconds;
 		},//更改店铺的审核状态  0未审核   1已审核
-		changeJianyiStatus:function(status,id,e){
+		changeHelpStatus:function(status,id,e){
 		 layer.confirm('确认更改审核状态？', function(index){
 			$.ajax({
-				url:projectName+"/jianyi/changeJianyiStatus",
-				data:{"propIsCheck":status,"id":id},
+				url:projectName+"/help/changeHelpStatus",
+				data:{"helpStatus":status,"id":id},
 				type:"post",
 				success:function(data){
 					var el = e.target ;
@@ -316,8 +293,8 @@ var menuList = new Vue({
 				diag.close();
 			 };
 			 diag.show();
-		},deljianyi:function(id){
-			var url = projectName + "/jianyi/delJianyi?id=" + id;
+		},delHelp:function(id){
+			var url = projectName + "/help/delHelp?id=" + id;
 			$.ajax({
 				url : url,
 				type : "post",
@@ -347,15 +324,15 @@ var menuList = new Vue({
  */
 function changeSearchType() {
 	var i = $("<i class='ace-icon fa fa-search nav-search-icon'></i>")
-	var ByJianyiTitle = $("<input class='nav-search-input input-sm' autocomplete='off' id='jianYiTitle' type='text' name='jianYiTitle' value='' placeholder='这里输入建议标题'>");
+	var ByHelpTitle = $("<input class='nav-search-input input-sm' autocomplete='off' id='helpTitle' type='text' name='helpTitle' value='' placeholder='这里输入帮助标题'>");
 	var Bycreated = $("<input  id='created' type='date'  class='form_datetime input-sm' data-date-format='yyyy-mm-dd hh:ii' style='border: 1px solid #6fb3e0;border-radius: 4px !important;' name='created'  placeholder='创建日期'>");
 	var searchType = $("#searchType").val();
 
 	// keywords 店铺名 addUser 用户名/手机号 shopId 店铺ID created 创建日期
 	if (searchType == 0) {
 		$("#typeViews").empty();
-		$("#typeViews").append(ByJianyiTitle).append(i);
-		jianYiTitle = $("#jianYiTitle").val().length == 0 ? "" : $("#jianYiTitle").val();
+		$("#typeViews").append(ByHelpTitle).append(i);
+		helpTitle = $("#helpTitle").val().length == 0 ? "" : $("#helpTitle").val();
 		gotoByAjax(page, rows, type);
 	}else if (searchType == 1) {
 		$("#typeViews").empty();
@@ -364,28 +341,4 @@ function changeSearchType() {
 		gotoByAjax(page, rows, type);
 	}
 
-}
-/**
- * 查看文本框数据是否为空
- * 
- * @returns
- */
-function checkInputTextIsNull() {
-	var f = [ "seasTitle", "seasWeigetKg" ];
-	var isReturn = false;// 标识是否跳出方法
-	$.each(f, function(index, v) {
-		if ($("#" + v).val() == "" || $.trim($("#" + v).val()).length == 0) {
-			$("#" + v).tips({
-				side : 3,
-				msg : '不能为空',
-				bg : '#AE81FF',
-				time : 4
-			});
-			$("#" + v).focus();
-			isReturn = true;
-		}
-	});
-	if (isReturn)
-		return false;
-	return true;
 }

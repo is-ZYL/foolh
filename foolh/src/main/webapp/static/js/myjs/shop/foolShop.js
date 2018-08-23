@@ -3,17 +3,14 @@ var pathName = window.document.location.pathname;
 var projectName = pathName.substring(0, pathName.substr(1).indexOf('/') + 1);
 
 // 初始化所有数据
-var pageInfo = {};
 var page = 1;
 var rows = 10;
 var type = 100;
 var total = 0;
 var list = []; // 店铺list数据
 var diag;// 弹窗
-var foolseas = [];// 所有材料信息
-var foolIdBySeas;// 材料id
-// 设置关键字搜索初始默认值 店铺名，店铺创建时间，店铺类型，店铺ID，店铺老板名称/手机号
-var shopTitle = "", created = "", is_check = "", shopId = 0, addUser = "";
+// 设置关键字搜索初始默认值 店铺名，店铺创建时间，店铺类型，店铺ID，店铺老板名称/手机号，审核状态
+var shopTitle = "", created = "", is_check = "", shopId = 0, addUser = "",status="";
 var sendShopId;//配送店铺id
 var bindShopId;//绑定店铺id
 $(top.hangge());
@@ -261,8 +258,8 @@ function gotoByAjax(page, rows, type) {
 		created = "";
 	}
 	is_check = $("#is_check").val();
-	var allInfo = [ page, rows, type, shopTitle, is_check, created, shopId,
-			addUser ];
+	status = $("#status").val();
+	var allInfo = [ page, rows, type, shopTitle, is_check, created, shopId,addUser,status];
 	$.ajax({
 		url : projectName + '/foolshop/getShopList?allInfo=' + allInfo,
 		type : 'GET',
@@ -441,22 +438,6 @@ var menuList = new Vue({
 			 })
 		 })
 		layer.close(index);
-	/*	$.ajax({
-				url:projectName+"/foolshop/getBindShopByShopId?id="+id,
-				type:"get",
-				success:function(result){
-					layer.close(index);
-						$("#shopModal").modal("show");
-						$("#myShopModalLabel").text("绑定店铺列表");
-						$("#addSendShopBtn").text("添加绑定店铺");
-						shopModal.shopList = result.list;
-					alert(JSON.stringify(result));
-				},error:function(){
-					layer.close(index);
-					layer.msg("服务器异常！！！获取店铺数据失败",{icon:5});
-				}
-					
-			})*/
 		}
 		// 时间格式化	
 		,dateFormat : function(time) {
@@ -488,15 +469,7 @@ var menuList = new Vue({
 				success:function(data){
 					var el = e.target ;
 					layer.msg("审核状态更新成功",{icon:6})
-					if ($(el).text() == "未审核") {
-						$(el).text("已审核");
-						$(el).removeClass("btn-danger");
-						$(el).addClass("btn-primary");
-					}else if ($(el).text() == "已审核"){
-						$(el).text("未审核");
-						$(el).addClass("btn-danger");
-						$(el).removeClass("btn-primary");
-					}
+					gotoByAjax(page, rows, type);
 				},error:function(){
 					layer.msg("审核状态更新失败",{icon:5})
 				}
@@ -648,21 +621,6 @@ function checkFoolSeasByFoolId(id) {
 	        });
 	 })
 	 layer.close(index);
-/*		
-	  var index = layer.load(2, {time : 10 * 1000	});
-	  $.ajax({
-		  url:projectName+"/foolshop/getBindShopListByShopId?id="+bindShopId,
-		  type:"get",
-		  success:function(data){
-			  layer.close(index);
-			  alert(JSON.stringify(data));
-			  $("#bindShopModal").modal("show");
-			  bindShopModal.shopList = data;
-		  },error:function(){
-			  layer.close(index);
-			  layer.msg("获取店铺失败！！！ 请稍后重试",{icon:5});
-		  }
-	  })*/
 	  }
   } 
  })
@@ -694,9 +652,7 @@ function checkFoolSeasByFoolId(id) {
 	  				 layer.msg("绑定店铺成功",{icon:6});
 	  				 $("#shopModal").modal("hide");
 	  				 $("#bindShopModal").modal("hide");
-/*	  				 menuList.getBindShopByShopId(bindShopId);
-	  				 $("#shopModal").modal("show");
-*/	  			  },error:function(){
+	  			  },error:function(){
 	  				layer.close(index);
 	  				  layer.msg("绑定店铺失败！！！ 请稍后重试",{icon:5});
 	  			  }
@@ -743,127 +699,6 @@ function changeSearchType() {
 		gotoByAjax(page, rows, type);
 	}
 
-}
-/**
- * 点击添加材料 隐藏消息框 并显示添加材料的模态框
- * 
- * @returns
- */
-function addFoolSeasView() {
-	$("#msgModal").modal("hide");
-	$("#seasModal").modal("hide");
-}
-/**
- * 点击添加材料 隐藏消息框 并显示添加材料的模态框
- * 
- * @returns
- */
-function showFoolSeasView() {
-	$("#seasModal").modal("show");
-	$("#addseasModal").modal("hide");
-}
-
-/**
- * 查询当前菜品的材料名是否存在，存在则不允许添加
- * 
- * @returns
- */
-function checkFoolSeasTitleIsOk(foolSeasTitle) {
-	var isOK = false;
-	if (foolSeasTitle.length != 0 || foolSeasTitle != "") {
-		$.ajax({
-			url : projectName + "/foolseas/getFoolSeasLibraryTitle?foolId="
-					+ foolIdBySeas + "&seasTitle=" + $("#seasTitle").val(),
-			type : "get",
-			success : function(data) {
-				if (data.length != 0 || data.seasTitle != undefined) {
-					$("#seasTitle").tips({
-						side : 3,
-						msg : '材料名重复，不允许再次添加',
-						bg : '#AE81FF',
-						time : 2
-					});
-					$("#seasTitle").focus();
-					isOK = false;
-				}
-			},
-			error : function() {
-				layer.close(index);
-				layer.msg("获取材料名异常！！！ 请稍后再试", {
-					icon : 5
-				});
-			}
-		})
-	}
-	if (isOK)
-		return false;
-	return true;
-}
-
-/**
- * 添加菜品所需材料
- * 
- * @returns
- */
-function addFoolseas() {
-	if (checkInputTextIsNull()) {
-		var seasTitle = $("#seasTitle").val();
-		var seasWeigetKg = $("#seasWeigetKg").val();
-		var seasSelect = $("#seasSelect").val();
-		var seasMsg = $("#seasMsg").val();
-		var fs = {
-			"foolId" : foolIdBySeas,
-			"seasTitle" : seasTitle,
-			"seasWeigetKg" : seasWeigetKg,
-			"seasSelect" : seasSelect,
-			"seasMsg" : seasMsg
-		};
-		$.ajax({
-			url : projectName + '/foolseas/addFoolSeasLibraryByMenuId',
-			type : "post",
-			data : fs,
-			success : function(data) {
-				layer.msg("添加成功");
-				$('#foolseasMenu')[0].reset();
-				$("#addSeasModal").modal("hide");
-				$("#seasModal").modal("show");
-
-			},
-			error : function() {
-				layer.close(index);
-				layer.msg("服务器异常", {
-					icon : 5
-				});
-			}
-
-		})
-	}
-
-}
-
-/**
- * 查看文本框数据是否为空
- * 
- * @returns
- */
-function checkInputTextIsNull() {
-	var f = [ "seasTitle", "seasWeigetKg" ];
-	var isReturn = false;// 标识是否跳出方法
-	$.each(f, function(index, v) {
-		if ($("#" + v).val() == "" || $.trim($("#" + v).val()).length == 0) {
-			$("#" + v).tips({
-				side : 3,
-				msg : '不能为空',
-				bg : '#AE81FF',
-				time : 4
-			});
-			$("#" + v).focus();
-			isReturn = true;
-		}
-	});
-	if (isReturn)
-		return false;
-	return true;
 }
 
 /**

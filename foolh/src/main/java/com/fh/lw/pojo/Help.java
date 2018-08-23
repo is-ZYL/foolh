@@ -15,6 +15,7 @@ public class Help extends BasePojo {
 	private Long helpAddUserId;// 添加帮助的用户id
 	private String helpTitle;// 标题
 	private String helpMsg;// 内容
+	private Integer helpStatus;// 状态 0 未查看  1 已解决
 
 	public Long getId() {
 		return id;
@@ -47,5 +48,21 @@ public class Help extends BasePojo {
 	public void setHelpMsg(String helpMsg) {
 		this.helpMsg = helpMsg;
 	}
+
+
+	public Integer getHelpStatus() {
+		return helpStatus;
+	}
+
+	public void setHelpStatus(Integer helpStatus) {
+		this.helpStatus = helpStatus;
+	}
+
+	@Override
+	public String toString() {
+		return "Help [id=" + id + ", helpAddUserId=" + helpAddUserId + ", helpTitle=" + helpTitle + ", helpMsg="
+				+ helpMsg + ", helpStatus=" + helpStatus + "]";
+	}
+
 
 }

@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.fh.controller.base.BaseController;
 import com.fh.lw.pojo.Help;
+import com.fh.lw.pojo.Jianyi;
 import com.fh.lw.service.FoolAndUserService;
 import com.fh.lw.service.FoolLibraryMenuService;
 import com.fh.lw.service.FoolLibraryPrepareCreateService;
@@ -29,6 +30,9 @@ import com.fh.lw.service.HelpService;
 import com.fh.lw.service.JinyanService;
 import com.fh.lw.service.RedisService;
 import com.fh.lw.service.UserWxService;
+import com.github.pagehelper.PageInfo;
+
+import oracle.net.aso.h;
 
 /**
  * 菜品
@@ -76,18 +80,18 @@ public class HelpController extends BaseController{
 	@Autowired
 	private FoolUserLogService foolUserLogService;
 
-	/***
-	 * 获取所有帮助
+	/**
+	 * 
+	 * 获取所有的建议
 	 * 
 	 * @return
 	 */
 	@RequestMapping(value = "getHelpList", method = RequestMethod.GET)
-	public ResponseEntity<List<Help>> getHelpList() {
+	public ResponseEntity<PageInfo<Help>> getHelpList(@RequestParam("allInfo") String[] allInfo) {
 		try {
-
-			List<Help> queryAll = this.helpService.queryAll();
+			PageInfo<Help> list = this.helpService.getJianyiByKeywordsAndOtherInfo(allInfo);
 			// 查看
-			return ResponseEntity.ok(queryAll);
+			return ResponseEntity.ok(list);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -95,19 +99,19 @@ public class HelpController extends BaseController{
 		return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
 	}
 
+
 	/**
-	 * 根据id查询帮助详情
+	 * 修改建议状态
 	 * 
-	 * @param id
 	 * @return
 	 */
-	@RequestMapping(value = "getHelpDetail", method = RequestMethod.GET)
-	public ResponseEntity<Help> getHelpDetail(@RequestParam("id") Long id) {
+	@RequestMapping(value = "changeHelpStatus", method = RequestMethod.POST)
+	public ResponseEntity<Void> changeHelpStatus(Help help) {
 		try {
-
-			Help queryAll = this.helpService.queryById(id);
+			// 通过id获取店铺
+			this.helpService.changeJianyiStatus(help);
 			// 查看
-			return ResponseEntity.ok(queryAll);
+			return ResponseEntity.status(HttpStatus.OK).build();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -116,18 +120,17 @@ public class HelpController extends BaseController{
 	}
 
 	/**
-	 * 添加帮助
+	 * 批量删除建议数据
 	 * 
-	 * @param help
 	 * @return
 	 */
-	@RequestMapping(value = "addHelp", method = RequestMethod.POST)
-	public ResponseEntity<List<Help>> getHelpList(Help help) {
+	@RequestMapping(value = "delHelpis", method = RequestMethod.POST)
+	public ResponseEntity<Void> delJianyis(@RequestParam("ids") String ids) {
 		try {
-			// 添加帮助
-			this.helpService.saveSelective(help);
-
-			return ResponseEntity.status(HttpStatus.CREATED).build();
+			if (this.helpService.deleteByIds(ids))
+				// 查看
+				return ResponseEntity.status(HttpStatus.OK).build();
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -136,38 +139,16 @@ public class HelpController extends BaseController{
 	}
 
 	/**
-	 * 修改帮助
+	 * 删除建议数据
 	 * 
-	 * @param help
 	 * @return
 	 */
-	@RequestMapping(value = "updateHelp", method = RequestMethod.POST)
-	public ResponseEntity<Void> updateHelp(Help help) {
+	@RequestMapping(value = "delHelp", method = RequestMethod.POST)
+	public ResponseEntity<Void> delJianyi(Help help) {
 		try {
-			// 修改帮助
-			this.helpService.updateSelective(help);
-
-			return ResponseEntity.status(HttpStatus.CREATED).build();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		// 出错500
-		return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
-	}
-
-	/**
-	 * 根据id删除帮助
-	 * 
-	 * @param id
-	 * @return
-	 */
-	@RequestMapping(value = "deleteHelp", method = RequestMethod.POST)
-	public ResponseEntity<Void> deleteHelp(@RequestParam("id") Long id) {
-		try {
-			// 修改帮助
-			this.helpService.deleteById(id);
-
-			return ResponseEntity.status(HttpStatus.CREATED).build();
+			if (this.helpService.deleteByWhere(help) > 0)
+				return ResponseEntity.status(HttpStatus.OK).build();
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

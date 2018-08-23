@@ -107,7 +107,7 @@
 											<th class='center'>制作时间</th>
 											<th class='center'>单价</th>
 											<th class='center'>材料</th>
-											<th class='center'>公共菜品/店铺私有</th>
+											<th class='center'>菜品类型</th>
 											<th class='center'>创建时间</th>
 											<th class='center'>更新时间</th>
 											<th class='center'>添加用户</th>

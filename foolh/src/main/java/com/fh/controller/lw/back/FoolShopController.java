@@ -96,7 +96,7 @@ public class FoolShopController extends BaseController {
 	 * @return
 	 */
 	@RequestMapping(value = "addShop", method = RequestMethod.POST)
-	public ResponseEntity<Void> addShop(@RequestBody FoolShop f,HttpSession session) {
+	public ResponseEntity<Void> addShop(@RequestBody FoolShop f, HttpSession session) {
 		try {
 			User user = (User) session.getAttribute(Const.SESSION_USER);
 			f.setShopAddUserId(user.getUSER_ID());
@@ -281,7 +281,7 @@ public class FoolShopController extends BaseController {
 		// 出错500
 		return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
 	}
-	
+
 	/**
 	 * 根据店铺id其他类型的店铺方便进行绑定
 	 * 
@@ -293,11 +293,11 @@ public class FoolShopController extends BaseController {
 	@RequestMapping(value = "getBindShopListByShopId", method = RequestMethod.GET)
 	public ResponseEntity<Layui> getBindShopListByShopId(FoolShop fShop,
 			@RequestParam(value = "page", defaultValue = "1") Integer page,
-			@RequestParam(value = "limit", defaultValue = "10") Integer limit ,
-		@RequestParam(value = "keyword", defaultValue = "") String keyword) {
+			@RequestParam(value = "limit", defaultValue = "10") Integer limit,
+			@RequestParam(value = "keyword", defaultValue = "") String keyword) {
 		try {
 			// 通过id获取店铺
-			PageInfo<FoolShop> list  = this.foolShopService.queryBindShopListByShopId(page, limit,fShop,keyword);
+			PageInfo<FoolShop> list = this.foolShopService.queryBindShopListByShopId(page, limit, fShop, keyword);
 			Layui layui = Layui.data(list.getTotal(), list.getList());
 			// 查看
 			return ResponseEntity.ok(layui);
@@ -307,18 +307,20 @@ public class FoolShopController extends BaseController {
 		// 出错500
 		return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
 	}
+
 	/**
 	 * 根据绑定店铺的id与被绑定的id店铺进行绑定
+	 * 
 	 * @param oldId 绑定id
-	 * @param newId 被绑定id 
+	 * @param newId 被绑定id
 	 * @return
 	 */
-	
+
 	@RequestMapping(value = "bindShopByShopId", method = RequestMethod.POST)
-	public ResponseEntity<Void> bindShopByShopId(@RequestParam Long oldId,@RequestParam Long newId) {
+	public ResponseEntity<Void> bindShopByShopId(@RequestParam Long oldId, @RequestParam Long newId) {
 		try {
 			// 通过id获取店铺
-			this.foolShopService.bindShopByShopId(oldId,newId);
+			this.foolShopService.bindShopByShopId(oldId, newId);
 			// 查看
 			return ResponseEntity.status(HttpStatus.OK).build();
 		} catch (Exception e) {
@@ -327,18 +329,21 @@ public class FoolShopController extends BaseController {
 		// 出错500
 		return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
 	}
+
 	/**
 	 * 取消店铺之间的绑定
+	 * 
 	 * @param oldId 绑定id
-	 * @param newId 被绑定id 
-	 * @return 
+	 * @param newId 被绑定id
+	 * @return
 	 */
-	
+
 	@RequestMapping(value = "cancelBindShopByShopId", method = RequestMethod.POST)
-	public ResponseEntity<Void> cancelBindShopByShopId(@RequestParam("oldId") Long oldId,@RequestParam("newId") Long newId) {
+	public ResponseEntity<Void> cancelBindShopByShopId(@RequestParam("oldId") Long oldId,
+			@RequestParam("newId") Long newId) {
 		try {
 			// 通过id获取店铺
-			this.foolShopService.cancelBindShopByShopId(oldId,newId);
+			this.foolShopService.cancelBindShopByShopId(oldId, newId);
 			// 查看
 			return ResponseEntity.status(HttpStatus.OK).build();
 		} catch (Exception e) {
@@ -347,18 +352,19 @@ public class FoolShopController extends BaseController {
 		// 出错500
 		return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
 	}
+
 	/**
-	 * 取消店铺之间的绑定
-	 * @param oldId 绑定id
-	 * @param newId 被绑定id 
-	 * @return 
+	 * 改变店铺的审核状态
+	 * @param shopStatus
+	 * @param id
+	 * @return
 	 */
-	
 	@RequestMapping(value = "changeShopStatus", method = RequestMethod.POST)
-	public ResponseEntity<Void> changeShopStatus(@RequestParam("shopStatus") Integer shopStatus,@RequestParam("id") Long id) {
+	public ResponseEntity<Void> changeShopStatus(@RequestParam("shopStatus") Integer shopStatus,
+			@RequestParam("id") Long id) {
 		try {
 			// 通过id获取店铺
-			this.foolShopService.changeShopStatus(shopStatus,id);
+			this.foolShopService.changeShopStatus(shopStatus, id);
 			// 查看
 			return ResponseEntity.status(HttpStatus.OK).build();
 		} catch (Exception e) {
