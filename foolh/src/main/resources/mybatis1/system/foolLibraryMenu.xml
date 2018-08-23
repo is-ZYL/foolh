@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+	<mapper namespace="foolLibraryMenuMapper">
+	<!-- 未完善  半成品 2018.08.09  主要是想进行mybatis模糊查询操作的实现-->
+	<resultMap type="FoolLibraryMenu" id="foolLibraryMenu">
+		<id column="id" property="id"/>
+		<result column="fool_title" property="foolTitle" />
+		<result column="fool_img_title" property="foolImgTitle"/>
+		<result column="fool_make_time" property="foolMakeTime"/>
+		<result column="fool_price" property="foolPrice"/>
+		<result column="fool_is_shop" property="foolIsShop"/>
+		<result column="fool_add_user_id" property="foolAddUserId"/>
+		<result column="fool_shop_id" property="foolShopId"/>
+	</resultMap>
+	
+	<resultMap type="User" id="userResultMap">
+		<id column="USER_ID" property="USER_ID"/>
+		<result column="USERNAME" property="USERNAME"/>
+		<result column="PASSWORD" property="PASSWORD"/>
+		<result column="NAME" property="NAME"/>
+		<result column="RIGHTS" property="RIGHTS"/>
+		<result column="LAST_LOGIN" property="LAST_LOGIN"/>
+		<result column="STATUS" property="STATUS"/>
+		<result column="ROLE_ID" property="ROLE_ID"/>
+		<result column="SKIN" property="SKIN"/>
+		<result column="registdate" property="registdate" />
+	</resultMap>
+	
+	<!--表名 -->
+	<sql id="tableName">
+		tb_fool_library_menu
+	</sql>
+	<sql id="userName">
+		sys_user
+	</sql>
+	
+	<!-- 字段 -->
+	<sql id="Field">
+		id,
+		fool_title,
+		fool_img_title,
+		fool_make_time,
+		fool_price,
+		fool_is_shop,
+		fool_add_user_id,
+		fool_shop_id,
+		created,
+		updated
+	</sql>
+	
+	
+	<!-- 字段值 -->
+	<sql id="FieldValue">
+		#{id},
+		#{fool_title},
+		#{fool_img_title},
+		#{fool_make_time},
+		#{fool_price},
+		#{fool_is_shop},
+		#{fool_add_user_id},
+		#{fool_shop_id},
+		#{created},
+		#{updated}
+	</sql>
+	
+	<!-- 菜单列表(全部) -->
+	<select id="listAllUser" parameterType="FoolLibraryMenu" resultType="FoolLibraryMenu" >
+		select  f.id,
+				f.fool_title,
+				f.fool_img_title,
+				f.fool_make_time,
+				f.fool_price,
+				f.fool_is_shop,
+				f.fool_add_user_id,
+				f.fool_shop_id,
+				f.created,
+				f.updated
+		from <include refid="tableName"></include> f,<include refid="userName"></include>u 
+		where u.id = f.fool_add_user_id 
+		<if test="keywords!= null and keywords != ''"><!-- 关键词检索 -->
+			and
+				(
+					 u.foolTitle LIKE CONCAT(CONCAT('%', #{keywords}),'%')
+					 or 
+					 u.foolImgTitle LIKE CONCAT(CONCAT('%', #{keywords}),'%') 
+					 or
+					 u.foolMakeTime LIKE CONCAT(CONCAT('%', #{keywords}),'%')
+					 or
+					 u.foolPrice LIKE CONCAT(CONCAT('%', #{keywords}),'%')
+					 or
+					 u.fool_is_shop LIKE CONCAT(CONCAT('%', #{keywords}),'%')
+					 or
+					 u.fool_is_shop LIKE CONCAT(CONCAT('%', #{keywords}),'%')
+				)
+		</if>
+		<if test="ROLE_ID != null and ROLE_ID != ''"><!-- 角色检索 -->
+			and u.ROLE_ID=#{ROLE_ID} 
+		</if>
+		<if test="lastLoginStart!=null and lastLoginStart!=''"><!-- 登录时间检索 -->
+			and u.LAST_LOGIN &gt;= #{lastLoginStart} 
+		</if>
+		<if test="lastLoginEnd!=null and lastLoginEnd!=''"><!-- 登录时间检索 -->
+			and u.LAST_LOGIN &lt;= #{lastLoginEnd} 
+		</if>
+		order by u.LAST_LOGIN desc
+	</select>
+	
+	
+	</mapper>
