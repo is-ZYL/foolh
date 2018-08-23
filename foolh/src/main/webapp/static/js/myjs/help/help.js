@@ -227,6 +227,7 @@ var menuList = new Vue({
 		rows : 10,
 		type : 100,
 		total : 0,
+		index:{}
 	},
 	created : function() {
 		var _this = this;
@@ -309,10 +310,18 @@ var menuList = new Vue({
 				}
 			});
 		},showTextIfOut:function(e){
+			let _this =this;
 			var dom = e.currentTarget;
-			
-			//alert(JSON.stringify(dom));
-			
+			console.log($(dom).text());
+			_this.index = layer.tips($(dom).text(),$(dom),{
+				 tips: [3, '#0FA6D8'], //设置tips方向和颜色 类型：Number/Array，默认：2 tips层的私有参数。支持上右下左四个方向，通过1-4进行方向设定。如tips: 3则表示在元素的下面出现。有时你还可能会定义一些颜色，可以设定tips: [1, '#c00']
+				 tipsMore: false, //是否允许多个tips 类型：Boolean，默认：false 允许多个意味着不会销毁之前的tips层。通过tipsMore: true开启
+				 time:0 //2秒后销毁，还有其他的基础参数可以设置。。。。这里就不添加了  0表示不销毁
+			})
+		},closeTips:function(){
+			let _this =this;
+		   layer.close(_this.index); //销毁tips
+		   _this.index ={};
 		}
 	}
 

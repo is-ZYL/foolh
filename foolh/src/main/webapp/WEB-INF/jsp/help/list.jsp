@@ -97,7 +97,7 @@
 											</td>
 											<td class='center'>{{ser.id }}</td>
 											<td class='center'>{{ser.helpTitle }} </td>
-											<td calss="center" style=" max-width:100px;overflow:hidden;text-overflow:ellipsis;white-space: nowrap;" @mouseenter="showTextIfOut($event)"><span style="min-width: 90%">{{ ser.helpMsg == null ? "无":ser.helpMsg}}</span></td>
+											<td calss="center" style=" max-width:100px;overflow:hidden;text-overflow:ellipsis;white-space: nowrap;"><span @click="showTextIfOut($event)" v-on:blur="closeTips()" style="min-width: 90%">{{ ser.helpMsg == null ? "无":ser.helpMsg}}</span></td>
 											<td calss="center" style="text-align: center;"><a class="glyphicon glyphicon-eye-open"  @click="checkUserByID(ser.helpAddUserId)" title="点我查看用户信息"></a></td>
 											<td calss="center" style="text-align: center;"><span> {{ dateFormat(ser.created)}}</span></td>
 											<!-- 审核状态 -->
