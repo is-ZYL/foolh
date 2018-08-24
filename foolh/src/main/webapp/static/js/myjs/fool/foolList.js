@@ -252,7 +252,8 @@ var menuList =	new Vue({
 		 page:1,
 		 rows:10,
 		 type:100,
-		 total:0
+		 total:0,
+		 i:true
 	},
 created:function(){
 	var _this=this;
@@ -343,7 +344,24 @@ methods:{
 	    var seconds=date.getSeconds()<10 ? "0"+date.getSeconds() : date.getSeconds();
 	    // 拼接
 	    return year+"-"+month+"-"+day+" "+hours+":"+minutes+":"+seconds;
-	},
+	},showTextIfOut:function(event){
+		let _this =this;
+		let e = event.currentTarget;
+		let td_width = $(e).width();//td列的宽度
+		let word_width = $(e)[0].scrollWidth;//文本宽度.
+		let res = word_width > td_width;
+		if(_this.i && res){
+			_this.index = layer.tips($(e).text(),$(e),{
+				tips: [3, '#0FA6D8'], //设置tips方向和颜色 类型：Number/Array，默认：2 tips层的私有参数。支持上右下左四个方向，通过1-4进行方向设定。如tips: 3则表示在元素的下面出现。有时你还可能会定义一些颜色，可以设定tips: [1, '#c00']
+				tipsMore: false, //是否允许多个tips 类型：Boolean，默认：false 允许多个意味着不会销毁之前的tips层。通过tipsMore: true开启
+				time:0 //2秒后销毁，还有其他的基础参数可以设置   0表示不销毁
+			})
+			_this.i=!_this.i;
+		}else if(!_this.i){
+			layer.close(_this.index);
+			_this.i=!_this.i;
+		}
+	}
 } 
 
 })

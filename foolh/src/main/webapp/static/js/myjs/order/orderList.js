@@ -8,18 +8,18 @@ var rows = 10;
 var type = 100;
 var total = 0;
 var list = []; // 店铺list数据
-var diag;// 弹窗
+var diag;// 弹窗    prepTime userName shopTitle foolTitle
 // 设置关键字搜索初始默认值 店铺名，店铺创建时间，店铺类型，店铺ID，店铺老板名称/手机号
-var helpTitle = "", created = "", is_check = "";
+var foolTitle = "", shopTitle = "", userName = "",prepTime = "", created = "", is_check = "";
 $(top.hangge());
 /**
  * 批量删除店铺
  * 
  * @returns
  */
-function delHelps() {
+function delOrders() {
 	if (!$(":input[name='ids']").is(":checked")) {
-		layer.msg("未选择任何帮助", {
+		layer.msg("未选择任何订单数据", {
 			icon : 6
 		});
 		$("#zcheckbox").tips({
@@ -29,13 +29,13 @@ function delHelps() {
 			time : 2
 		});
 	} else {
-		layer.confirm("确定要删除选中帮助吗?", function(result) {
+		layer.confirm("确定要删除选中订单吗?", function(result) {
 			let ids = [];
-			$("#helpList").find(":input[name='ids']:checked").each(function() {
+			$("#orderList").find(":input[name='ids']:checked").each(function() {
 				ids.push($(this).val());
 			})
 			if (result && ids.length != 0) {
-				var url = projectName + "/help/delHelps?ids=" + ids;
+				var url = projectName + "/order/delOrders?ids=" + ids;
 				$.ajax({
 					url : url,
 					type : "post",
@@ -71,22 +71,32 @@ function build_page_nav(result) {
 		var lastPage = $("<li></li>").append($("<a></a>").append("末页"));
 		// 跳转页面的输入框
 		var inputNums = $("<li></li>")
-				.append($("<input type='number' id='toGoPage' style='width:55px;height:34px;text-align:center;margin-top:1px' min='1' placeholder='页码'/>")
-				.append("末页"));
+				.append(
+						$(
+								"<input type='number' id='toGoPage' style='width:55px;height:34px;text-align:center;margin-top:1px' min='1' placeholder='页码'/>")
+								.append("末页"));
 		// 跳转页面的按钮
 		var inputNumsButton = $("<li></li>")
-				.append($("<a style='float:right;height:34px;' class='btn btn-mini btn-success' onclick='gotoPage();'></a>")
-				.append("跳转"));
+				.append(
+						$(
+								"<a style='float:right;height:34px;' class='btn btn-mini btn-success' onclick='gotoPage();'></a>")
+								.append("跳转"));
 		// 总共条数
 		var totalInfo = $("<li></li>").append(
-				$("<a></a>").append("共").append($("<font color='red'>" + result.total + "</font>"))
+				$("<a></a>").append("共").append(
+						$("<font color='red'>" + result.total + "</font>"))
 						.append("条"));
 		// 总共页数
-		var pageNumsInfo = $("<li></li>").append($("<a></a>").append("共" + result.pages + "页"));
+		var pageNumsInfo = $("<li></li>").append(
+				$("<a></a>").append("共" + result.pages + "页"));
 		// 每页显示条数选择框
 		var pageSizeChoose = $("<li></li>")
-				.append($("<select title='显示条数'  id='changeCount' style='margin-left:1px;height:34px;'  onchange='changeCount(this.value)'></select>")
-				.append("<option selected='selected' value='10'>10</option><option value='20'>20</option><option value='30'>30</option><option value='40'>40</option><option value='50'>50</option><option value='60'>60</option><option value='70'>70</option><option value='80'>80</option><option value='90'>90</option><option value='100'>100</option>"));
+				.append(
+						$(
+								"<select title='显示条数'  id='changeCount' style='margin-left:1px;height:34px;'  onchange='changeCount(this.value)'></select>")
+								.append(
+										"<option selected='selected' value='10'>10</option><option value='20'>20</option><option value='30'>30</option><option value='40'>40</option><option value='50'>50</option><option value='60'>60</option><option value='70'>70</option><option value='80'>80</option><option value='90'>90</option><option value='100'>100</option>"));
+
 		var ul = $("#pageNums");
 		// 先清空之前的数据
 		ul.empty();
@@ -189,17 +199,26 @@ function gotoByAjax(page, rows, type) {
 	});
 	var searchType = $("#searchType").val();
 	if (searchType == 0) {
-		helpTitle = $("#helpTitle").val().length == 0 ? "" : $("#helpTitle").val();
+		foolTitle = $("#foolTitle").val().length == 0 ? "" : $("#foolTitle").val();
 		// 获取过后将其他关键字值进行初始化
-		created = "";
+		shopTitle = "", userName = "",prepTime = "", created = "";
 	} else if (searchType == 1) {
 		created = $("#created").val().length == 0 ? "" : $("#created").val();
-		helpTitle = "";
-	} 
+		foolTitle = "", shopTitle = "", userName = "",prepTime = "";
+	}else if (searchType == 2) {
+		prepTime = $("#prepTime").val().length == 0 ? "" : $("#prepTime").val();
+		foolTitle = "", shopTitle = "", userName = "",created = "";
+	}else if (searchType == 3) {
+		userName = $("#userName").val().length == 0 ? "" : $("#userName").val();
+		foolTitle = "", shopTitle = "",prepTime = "", created = "";
+	}else if (searchType == 4) {
+		shopTitle = $("#shopTitle").val().length == 0 ? "" : $("#shopTitle").val();
+		foolTitle = "", userName = "",prepTime = "", created = "";
+	}
 	is_check = $("#is_check").val();
-	var allInfo = [ page, rows, type, helpTitle, is_check, created];
+	var allInfo = [ page, rows, type,foolTitle,shopTitle, userName, prepTime, is_check, created];
 	$.ajax({
-		url : projectName + '/help/getHelpList?allInfo=' + allInfo,
+		url : projectName + '/order/getOrderList?allInfo=' + allInfo,
 		type : 'GET',
 		success : function(d) {
 			layer.close(index);
@@ -227,8 +246,7 @@ var menuList = new Vue({
 		rows : 10,
 		type : 100,
 		total : 0,
-		index:0,
-		i:0
+		i:true
 	},
 	created : function() {
 		var _this = this;
@@ -266,19 +284,19 @@ var menuList = new Vue({
 			// 拼接
 			return year + "-" + month + "-" + day + " " + hours + ":" + minutes
 					+ ":" + seconds;
-		},//更改店铺的审核状态  0未审核   1已审核
-		changeHelpStatus:function(status,id,e){
+		},//更改订单审核状态  0未配送   1已配送
+		changeOrderStatus:function(status,id,e){
 		 layer.confirm('确认更改审核状态？', function(index){
 			$.ajax({
-				url:projectName+"/help/changeHelpStatus",
-				data:{"helpStatus":status,"id":id},
+				url:projectName+"/order/changeOrderStatus",
+				data:{"status":status,"id":id},
 				type:"post",
 				success:function(data){
 					var el = e.target ;
-					layer.msg("审核状态更新成功",{icon:6})
+					layer.msg("状态更新成功",{icon:6})
 					gotoByAjax(page, rows, type);
 				},error:function(){
-					layer.msg("审核状态更新失败",{icon:5})
+					layer.msg("状态更新失败",{icon:5})
 				}
 				
 			})
@@ -295,8 +313,8 @@ var menuList = new Vue({
 				diag.close();
 			 };
 			 diag.show();
-		},delHelp:function(id){
-			var url = projectName + "/help/delHelp?id=" + id;
+		},delOrder:function(id){
+			var url = projectName + "/order/delOrder?id=" + id;
 			$.ajax({
 				url : url,
 				type : "post",
@@ -313,17 +331,22 @@ var menuList = new Vue({
 		},showTextIfOut:function(event){
 			let _this =this;
 			let e = event.currentTarget;
-			if(_this.i == 0){
+			let td_width = $(e).width();//td列的宽度
+			let word_width = $(e)[0].scrollWidth;//文本宽度.
+			let res = word_width > td_width;
+			if(_this.i && res){
 				_this.index = layer.tips($(e).text(),$(e),{
 					tips: [3, '#0FA6D8'], //设置tips方向和颜色 类型：Number/Array，默认：2 tips层的私有参数。支持上右下左四个方向，通过1-4进行方向设定。如tips: 3则表示在元素的下面出现。有时你还可能会定义一些颜色，可以设定tips: [1, '#c00']
 					tipsMore: false, //是否允许多个tips 类型：Boolean，默认：false 允许多个意味着不会销毁之前的tips层。通过tipsMore: true开启
-					time:0 //2秒后销毁，还有其他的基础参数可以设置。。。。这里就不添加了  0表示不销毁
+					time:0 //2秒后销毁，还有其他的基础参数可以设置   0表示不销毁
 				})
-				_this.i=1;
-			}else{
+				_this.i=!_this.i;
+			}else if(!_this.i){
 				layer.close(_this.index);
-				_this.i=0;
+				_this.i=!_this.i;
 			}
+		},time:function(a){
+			time(a);
 		}
 	}
 
@@ -334,22 +357,104 @@ var menuList = new Vue({
  * @returns
  */
 function changeSearchType() {
+	
 	var i = $("<i class='ace-icon fa fa-search nav-search-icon'></i>")
-	var ByHelpTitle = $("<input class='nav-search-input input-sm' autocomplete='off' id='helpTitle' type='text' name='helpTitle' value='' placeholder='这里输入帮助标题'>");
-	var Bycreated = $("<input  id='created' type='date'  class='form_datetime input-sm' data-date-format='yyyy-mm-dd hh:ii' style='border: 1px solid #6fb3e0;border-radius: 4px !important;' name='created'  placeholder='创建日期'>");
+	var ByFoolTitle = $("<input class='nav-search-input input-sm' autocomplete='off' id='foolTitle' type='text' name='foolTitle' value='' placeholder='这里输入菜品名'>");
+	var ByShop = $("<input class='nav-search-input input-sm' autocomplete='off' id='shopTitle' type='text' name='shopTitle' value='' placeholder='这里输入店铺名'>");
+	var ByUser = $("<input class='nav-search-input input-sm' autocomplete='off' id='userName' type='text' name='userName' value='' placeholder='这里输入用户名'>");
+	var Bycreated = $("<input  id='created' type='date'  class='form_datetime input-sm' data-date-format='yyyy-mm-dd hh:ii' style='border: 1px solid #6fb3e0;border-radius: 4px !important;' name='created'  placeholder='下单日期'>");
+	var ByprepTime = $("<input  id='prepTime' type='date'  class='form_datetime input-sm' data-date-format='yyyy-mm-dd hh:ii' style='border: 1px solid #6fb3e0;border-radius: 4px !important;' name='prepTime'  placeholder='配送日期'>");
+	
 	var searchType = $("#searchType").val();
-
+	
 	// keywords 店铺名 addUser 用户名/手机号 shopId 店铺ID created 创建日期
 	if (searchType == 0) {
 		$("#typeViews").empty();
-		$("#typeViews").append(ByHelpTitle).append(i);
-		helpTitle = $("#helpTitle").val().length == 0 ? "" : $("#helpTitle").val();
+		$("#typeViews").append(ByFoolTitle).append(i);
+		foolTitle = $("#foolTitle").val().length == 0 ? "" : $("#foolTitle").val();
 		gotoByAjax(page, rows, type);
 	}else if (searchType == 1) {
 		$("#typeViews").empty();
 		$("#typeViews").append(Bycreated).append(i);
 		created = $("#created").val().length == 0 ? "" : $("#created").val();
 		gotoByAjax(page, rows, type);
+	}else if (searchType == 2) {
+		$("#typeViews").empty();
+		$("#typeViews").append(ByprepTime).append(i);
+		prepTime = $("#prepTime").val().length == 0 ? "" : $("#prepTime").val();
+		gotoByAjax(page, rows, type);
+	}else if (searchType == 3) {
+		$("#typeViews").empty();
+		$("#typeViews").append(ByUser).append(i);
+		userName = $("#userName").val().length == 0 ? "" : $("#userName").val();
+		gotoByAjax(page, rows, type);
+	}else if (searchType == 4) {
+		$("#typeViews").empty();
+		$("#typeViews").append(ByShop).append(i);
+		shopTitle = $("#shopTitle").val().length == 0 ? "" : $("#shopTitle").val();
+		gotoByAjax(page, rows, type);
 	}
 
 }
+/**
+ * 根据已有时间判断是否是今天,明天,昨天,后天
+ * @param data
+ * @returns 
+ */
+function time(data){
+	//将时间转换成纯数字组合  方便下面进行拆分  replace(/[^0-9]/ig,"")抓取所有数字
+	  var date = menuList.dateFormat(data).replace(/[^0-9]/ig,"");
+	   var year = date.substring(0,4);
+	   var month = date.substring(4,6);
+	   var day = date.substring(6,8);
+	   var hour = date.substring(8,10);
+	   var minute = date.substring(10,12);
+	   var createTime = year + "-" + month + "-" + day + " "+hour+":"+minute;
+
+
+	   var date3 = GetDateStr(-1);//昨天
+	   var str3=date3.split("-");
+	   str3[1]=str3[1].length == 1 ? '0'+str3[1]:str3[1];
+	   str3[2]=str3[2].length == 1 ? '0'+str3[2]:str3[2];
+	   
+	   var date0 = GetDateStr(0);//今天
+	   var str0=date0.split("-");
+	   str0[1]=str0[1].length == 1 ? '0'+str0[1]:str0[1];
+	   str0[2]=str0[2].length == 1 ? '0'+str0[2]:str0[2];
+	   
+	   var date1 = GetDateStr(1);//明天
+	   var str1=date1.split("-");
+	   str1[1]=str1[1].length == 1 ? '0'+str1[1]:str1[1];
+	   str1[2]=str1[2].length == 1 ? '0'+str1[2]:str1[2];
+
+
+	   var date2 = GetDateStr(2);//后天
+	   var str2=date2.split("-");
+	   str2[1]=str2[1].length == 1 ? '0'+str2[1]:str2[1];
+	   str2[2]=str2[2].length == 1 ? '0'+str2[2]:str2[2];
+	   
+	   if(year == str3[0] && month == str3[1] && day == str3[2]){
+	       return "昨天"+ " "+hour+":"+minute
+	   }else if(year == str0[0] && month == str0[1] && day == str0[2]){
+	       return "今天"+ " "+hour+":"+minute
+	   }else if(year == str1[0] && month == str1[1] && day == str1[2]){
+	       return "明天"+ " "+hour+":"+minute
+	   }else if(year == str2[0] && month == str2[1] && day == str2[2]){
+	       return "后天"+ " "+hour+":"+minute       
+	   }else{
+	       return createTime;
+	   }
+	}
+/**
+ * 获取当前的时间
+ * @param AddDayCount
+ * @returns
+ */
+function GetDateStr(AddDayCount) { 
+	var dd = new Date(); 
+	dd.setDate(dd.getDate()+AddDayCount);//获取AddDayCount天后的日期 
+	var y = dd.getFullYear(); 
+	var m = dd.getMonth()+1;//获取当前月份的日期 
+	var d = dd.getDate(); 
+	return y+"-"+m+"-"+d; 
+	}

@@ -11,20 +11,7 @@ var list = []; // 店铺list数据
 var diag;// 弹窗
 // 设置关键字搜索初始默认值 店铺名，店铺创建时间，店铺类型，店铺ID，店铺老板名称/手机号
 var jianYiTitle = "", created = "", is_check = "";
-var sendShopId;//配送店铺id
-var bindShopId;//绑定店铺id
 $(top.hangge());
-
-
-$(function(){
-	//设置模态框隐藏时，所有数据清零，防止数据错误
-	$("#shopModal").on('hide.bs.modal', function () {
-		shopModal.shopList=[];
-	});
-	$("#bindShopModal").on('hide.bs.modal', function () {
-		bindShopModal.shopList=[];
-	});
-})
 /**
  * 批量删除店铺
  * 
@@ -250,6 +237,7 @@ var menuList = new Vue({
 		rows : 10,
 		type : 100,
 		total : 0,
+		i:true
 	},
 	created : function() {
 		var _this = this;
@@ -331,11 +319,23 @@ var menuList = new Vue({
 					gotoByAjax(page, rows, type);
 				}
 			});
-		},showTextIfOut:function(e){
-			var dom = e.currentTarget;
-			
-			//alert(JSON.stringify(dom));
-			
+		},showTextIfOut:function(event){
+			let _this =this;
+			let e = event.currentTarget;
+			let td_width = $(e).width();//td列的宽度
+			let word_width = $(e)[0].scrollWidth;//文本宽度.
+			let res = word_width > td_width;
+			if(_this.i && res){
+				_this.index = layer.tips($(e).text(),$(e),{
+					tips: [3, '#0FA6D8'], //设置tips方向和颜色 类型：Number/Array，默认：2 tips层的私有参数。支持上右下左四个方向，通过1-4进行方向设定。如tips: 3则表示在元素的下面出现。有时你还可能会定义一些颜色，可以设定tips: [1, '#c00']
+					tipsMore: false, //是否允许多个tips 类型：Boolean，默认：false 允许多个意味着不会销毁之前的tips层。通过tipsMore: true开启
+					time:0 //2秒后销毁，还有其他的基础参数可以设置   0表示不销毁
+				})
+				_this.i=!_this.i;
+			}else if(!_this.i){
+				layer.close(_this.index);
+				_this.i=!_this.i;
+			}
 		}
 	}
 

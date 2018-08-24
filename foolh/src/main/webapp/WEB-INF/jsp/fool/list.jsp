@@ -124,16 +124,16 @@
 												</label>
 											</td>
 											<td class='center'>{{ser.id }}</td>
-											<td class='center'>{{ser.foolTitle }} </td>
+											<td class='center' style=" max-width:100px;overflow:hidden;text-overflow:ellipsis;white-space: nowrap;" @click.prevent="showTextIfOut($event)">{{ser.foolTitle }} </td>
 											<td class='center'><a class="glyphicon glyphicon-eye-open"  @click="showImgTitle(ser.id)"  title="点我查看菜品小图"></a></td>
 											<td class="center">{{ser.foolMakeTime }}分钟</td>
 											<td calss="center" style="text-align: center;">{{ser.foolPrice }}元</td>
 											<td calss="center" style="text-align: center;"><a class="glyphicon glyphicon-eye-open"  @click="checkFoolSeasByFoolId(ser.id)"  title="点我查看材料信息"></a></td>
 											<td calss="center" style="text-align: center;"><span>{{ser.foolIsShop == "1"?"公共菜品":"私有菜品 店铺id="+ser.foolShopId}}  </span></td>
-											<td calss="center" style="text-align: center;"><span> {{ dateFormat(ser.created)}}</span></td>
-											<td calss="center" style="text-align: center;"><span> {{ dateFormat(ser.updated)}}</span></td>
+											<td calss="center" style=" max-width:100px;overflow:hidden;text-overflow:ellipsis;white-space: nowrap;" @click.prevent="showTextIfOut($event)"><span> {{ dateFormat(ser.created)}}</span></td>
+											<td calss="center" style=" max-width:100px;overflow:hidden;text-overflow:ellipsis;white-space: nowrap;" @click.prevent="showTextIfOut($event)"><span> {{ dateFormat(ser.updated)}}</span></td>
 											<td calss="center" style="text-align: center;"><a class="glyphicon glyphicon-eye-open"  @click="checkUserByID(ser.foolAddUserId)" title="点我查看用户信息"></a></td>
-											<td calss="center" style="text-align: center;">{{ser.foolMsg == null ? "无":ser.foolMsg }}</td>
+											<td calss="center" style="max-width:100px;overflow:hidden;text-overflow:ellipsis;white-space: nowrap;" @click="showTextIfOut($event)">{{ser.foolMsg == null ? "无":ser.foolMsg }}</td>
 											<td class='center'>
 												<div class="hidden-sm hidden-xs action-buttons">
 													<a class="green" @click="editmenu(ser.id)"> <i

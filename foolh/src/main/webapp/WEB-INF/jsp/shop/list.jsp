@@ -104,12 +104,12 @@
 											<th class='center'>店铺地址</th>
 											<th class='center'>店铺介绍</th>
 											<th class='center'>创建时间</th>
-											<th class='center'>店铺类别</th>  
+											<th class='center' style="width: 100px">店铺类别</th>  
 											<!-- 只有饭店才能有下面两项选项 -->
-											<th class='center' >店铺私房菜</th> 
+											<th class='center' >私房菜</th> 
 											<th class='center' >绑定店铺</th> 
 											<th class='center'style="width:75px;" >审核状态</th> 
-											<th class='center' style="width: 120px;">操作</th>
+											<th class='center' style="width: 70px;">操作</th>
 										</tr>
 									</thead>
 									<tbody id="shopList">
@@ -121,12 +121,12 @@
 												</label>
 											</td>
 											<td class='center'>{{ser.id }}</td>
-											<td class='center'>{{ser.shopTitle }} </td>
-											<td class='center'>{{ser.shopBossName }} / {{ser.shopPhone }} </td>
+											<td class='center'style=" max-width:100px;overflow:hidden;text-overflow:ellipsis;white-space: nowrap;" @click.prevent="showTextIfOut($event)">{{ser.shopTitle }} </td>
+											<td class='center' style=" max-width:100px;overflow:hidden;text-overflow:ellipsis;white-space: nowrap;" @click.prevent="showTextIfOut($event)">{{ser.shopBossName }} / {{ser.shopPhone }} </td>
 											<td class='center'>{{ser.shopBossName }}</td>
-											<td class='center'>{{ser.shopAddress }} </td>
-											<td calss="center" style="text-align: center;">{{ ser.shopMsg == null ? "无":ser.shopMsg}} </td>
-											<td calss="center" style="text-align: center;"><span> {{ dateFormat(ser.created)}}</span></td>
+											<td class='center' style=" max-width:100px;overflow:hidden;text-overflow:ellipsis;white-space: nowrap;" @click="showTextIfOut($event)">{{ser.shopAddress }} </td>
+											<td calss="center" style=" max-width:100px;overflow:hidden;text-overflow:ellipsis;white-space: nowrap;" @click="showTextIfOut($event)">{{ ser.shopMsg == null ? "无":ser.shopMsg}} </td>
+											<td calss="center" style=" max-width:100px;overflow:hidden;text-overflow:ellipsis;white-space: nowrap;" @click.prevent="showTextIfOut($event)"><span> {{ dateFormat(ser.created)}}</span></td>
 											<td class="center">
 												<!-- 1.饭店，2. 蔬菜配送，3.水果4.调料干杂，5. 水产，6.海鲜，7.其它 默认0 --> 
 												<span v-if="ser.shopType ==1" >饭店</span>
@@ -398,7 +398,7 @@
 
 <!-- 私房菜列表的modal --> 
 <div class="modal fade "  id="shopFoolModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" >
-	<div class="modal-dialog " style="width:850px;overflow:auto; ">
+	<div class="modal-dialog " style="width:925px;overflow:auto; ">
 		<div class="modal-content">
 		 <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>

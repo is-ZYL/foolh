@@ -98,7 +98,7 @@
 											
 											<td class='center'>{{ser.id }}</td>
 											<td class='center'>{{ser.propTitle }} </td>
-											<td calss="center" style=" max-width:100px;overflow:hidden;text-overflow:ellipsis;white-space: nowrap;" @mouseenter="showTextIfOut($event)"><span style="min-width: 90%">{{ ser.propMsg == null ? "无":ser.propMsg}}</span></td>
+											<td calss="center" style=" max-width:100px;overflow:hidden;text-overflow:ellipsis;white-space: nowrap;" @click.prevent="showTextIfOut($event)">{{ ser.propMsg == null ? "无":ser.propMsg}}</td>
 											<td calss="center" style="text-align: center;"><a class="glyphicon glyphicon-eye-open"  @click="checkUserByID(ser.propAddUserId)" title="点我查看用户信息"></a></td>
 											<td calss="center" style="text-align: center;"><span> {{ dateFormat(ser.created)}}</span></td>
 											<!-- 审核状态 -->

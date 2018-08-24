@@ -1,4 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
+﻿<%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
@@ -42,7 +42,7 @@
 								<td>
 									<div class="nav-search">
 									<span class="input-icon" id='typeViews'>
-										<input class="nav-search-input input-sm" autocomplete="off" id="helpTitle" type="text" name="helpTitle"  placeholder="这里输入帮助标题">
+										<input class="nav-search-input input-sm" autocomplete="off" id="jianYiTitle" type="text" name="jianYiTitle"  placeholder="这里输入建议名称">
 										<i class="ace-icon fa fa-search nav-search-icon"></i>
 									</span>
 									</div>
@@ -50,16 +50,16 @@
 								<!-- 关键字类型 -->
 								<td style="vertical-align:top;padding-left:2px;">
 								 	<select class="nav-search-input" name="searchType" id="searchType" data-placeholder="关键字类型"  style="border: 1px solid #6fb3e0;border-radius: 4px !important;" onchange="changeSearchType();">
-										<option selected="selected" value="0">帮助标题</option>
-										<option value="1">时间</option>
+										<option selected="selected" value="0">建议标题</option>
+										<option value="1">建议时间</option>
 									</select>
 								</td>
 								
 								<td style="vertical-align:top;padding-left:2px;">
 								 	<select class="nav-search-input" name="is_check" id="is_check" data-placeholder="请选择状态"  style="border: 1px solid #6fb3e0;border-radius: 4px !important;" onchange="gotoByAjax(page, rows,100);">
 										<option selected="selected" value="">全部</option>
-										<option value="0">未查看</option>
-										<option value="1">已解决</option>
+										<option value="0">未审核</option>
+										<option value="1">已审核</option>
 									</select>
 								</td>
  								<td style="vertical-align:top;padding-left:2px;">
@@ -79,15 +79,15 @@
 												</label>
 											</th>
 											<th class="center" style="width: 50px;">序号</th>
-											<th class='center'>帮助标题</th>
+											<th class='center'>订单标题</th>
 											<th class='center'>内容详情</th>
-											<th class='center'>帮助用户</th>
+											<th class='center'>建议用户</th>
 											<th class='center'>时间</th>
 											<th class='center' width="100px">处理状态</th> 
 											<th class='center' width="100px">操作</th> 
 										</tr>
 									</thead>
-									<tbody id="helpList" >
+									<tbody id="jianYiList" >
 										<!-- 开始循环 -->
 										<tr v-cloak v-if="list != []"  v-for="ser in list">
 											<td class='center' style="width: 30px;">
@@ -95,17 +95,18 @@
 													<span class="lbl"></span>
 												</label>
 											</td>
+											
 											<td class='center'>{{ser.id }}</td>
-											<td class='center'>{{ser.helpTitle }} </td>
-											<td calss="center" style=" max-width:100px;overflow:hidden;text-overflow:ellipsis;white-space: nowrap;"><span @click="showTextIfOut($event)"  style="min-width: 90%">{{ ser.helpMsg == null ? "无":ser.helpMsg}}</span></td>
-											<td calss="center" style="text-align: center;"><a class="glyphicon glyphicon-eye-open"  @click="checkUserByID(ser.helpAddUserId)" title="点我查看用户信息"></a></td>
+											<td class='center'>{{ser.propTitle }} </td>
+											<td calss="center" style=" max-width:100px;overflow:hidden;text-overflow:ellipsis;white-space: nowrap;" @click.prevent="showTextIfOut($event)">{{ ser.propMsg == null ? "无":ser.propMsg}}</td>
+											<td calss="center" style="text-align: center;"><a class="glyphicon glyphicon-eye-open"  @click="checkUserByID(ser.propAddUserId)" title="点我查看用户信息"></a></td>
 											<td calss="center" style="text-align: center;"><span> {{ dateFormat(ser.created)}}</span></td>
 											<!-- 审核状态 -->
-											<td calss="center" style="text-align: center;width:60px" v-if="ser.helpStatus == 1" @click="changeHelpStatus(ser.helpStatus,ser.id,$event)"><a class="btn btn-mini btn-primary" title="更改审核状态">已解决</a></td>
-											<td calss="center" style="text-align: center;width:60px"  v-if="ser.helpStatus == 0" @click="changeHelpStatus(ser.helpStatus,ser.id,$event)"><a class="btn btn-mini btn-danger"  title="更改审核状态">未查看</a></td>
+											<td calss="center" style="text-align: center;width:60px" v-if="ser.propIsCheck == 1" @click="changeJianyiStatus(ser.propIsCheck,ser.id,$event)"><a class="btn btn-mini btn-primary" title="更改审核状态">已审核</a></td>
+											<td calss="center" style="text-align: center;width:60px"  v-if="ser.propIsCheck == 0" @click="changeJianyiStatus(ser.propIsCheck,ser.id,$event)"><a class="btn btn-mini btn-danger"  title="更改审核状态">未审核</a></td>
 											<td calss="center" style="max-width: 30px">
 												<div class="hidden-sm hidden-xs action-buttons center-block" style="max-width: 30px">
-													<a class="red" @click="delHelp(ser.id)"> <i class="ace-icon fa fa-trash-o bigger-130" title="删除"></i></a>
+													<a class="red" @click="deljianyi(ser.id)"> <i class="ace-icon fa fa-trash-o bigger-130" title="删除"></i></a>
 												</div>
 											</td>
 										</tr>
@@ -114,7 +115,7 @@
 
 								<div>
 									<div class="col-md-3" >
-										<a class="btn btn-sm btn-success" onclick="delHelps();">批量删除</a>
+										<a class="btn btn-sm btn-success" onclick="delJianyis();">批量删除</a>
 									</div>			
 									<!--显示分页信息-->
 									<div class="row pull-right" >
@@ -192,6 +193,6 @@
 	<script src="static/ace/js/date-time/bootstrap-datepicker.js"></script>
 	<!--提示框-->
 	<script type="text/javascript" src="static/js/jquery.tips.js"></script>
-		<script type="text/javascript" src="static/js/myjs/help/help.js"></script>
+		<script type="text/javascript" src="static/js/myjs/order/orderList.js"></script>
 </body>
 </html>
