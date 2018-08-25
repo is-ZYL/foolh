@@ -3,6 +3,7 @@ var pathName = window.document.location.pathname;
 var projectName = pathName.substring(0, pathName.substr(1).indexOf('/') + 1);
 
 // 初始化所有数据
+var pageInfo ={};
 var page = 1;
 var rows = 10;
 var type = 100;

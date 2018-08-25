@@ -245,39 +245,47 @@
                 <h4 class="modal-title" id="myModalLabel">添加材料</h4>
          </div>
 			<div class="modal-body" >
-			<form class="form-horizontal"  action="/foolseas/addFoolSeasLibraryByMenuId" method="post" name="foolseasMenu" id="foolseasMenu">
-					<div class="form-group">
-						<tr id="sTitle">
-							<td style="width:79px;text-align: center;padding-top: 13px;">  <label >材料名:</label></td>
-							<td><input type="text"  class="form-control"  name="seasTitle" id="seasTitle"  placeholder="材料名" onblur="checkFoolSeasTitleIsOk(this)" onkeyup="value=value.replace(/[^\u4E00-\u9FA5]/g,'')" /></td>
-						</tr>
-					</div>
-					<div class="form-group">
-						<tr id="sWeight">
-							<td style="width:79px;text-align: center;padding-top: 13px;">重量:</td>
-							<td><input  type="number"  class="form-control"  name="seasWeigetKg" id="seasWeigetKg"  min="0" placeholder="单位：kg" onkeyup="value=value.replace(/[^\d{1,}\.\d{1,}|\d{1,}]/g,'')" /></td>
-						</tr>
-					</div>
-					<div class="form-group">
-						<tr id="sSel">
-							<td style="width:79px;text-align: center;padding-top: 13px;">材料类型:</td>
+				<form   action="" method="post" name="foolseasMenu" id="foolseasMenu">
+				<table class="center-block" style="margin: 0 auto;width: 300px">
+					<tr>
+						<div class="form-inline form-group">
+						<td>
+								<div class="form-group">
+										 <label class="control-lable">材料名:</label>
+										<input type="text"  class="form-control"  name="seasTitle" id="seasTitle"  placeholder="材料名" onblur="checkFoolSeasTitleIsOk(this)" onkeyup="value=value.replace(/[^\u4E00-\u9FA5]/g,'')" />
+								</div>
+						</td>
+						<td>
+								<div class="form-group"  style="margin-left: 10px">
+										<lable class="control-lable">重量:</lable>
+										<input  type="number"  class="form-control"  name="seasWeigetKg" id="seasWeigetKg"  min="0" placeholder="单位：kg" onkeyup="value=value.replace(/[^\d{1,}\.\d{1,}|\d{1,}]/g,'')" />
+								</div>
+						</td>
+						</div>
+					</tr>
+						<tr>
+							<div class="form-inline form-group" >
 							<td>
-								<select class="form-control" name="seasSelect" id="seasSelect">
-										<option selected="selected" value="0">主料</option>
-										<option value="1">配料</option>
-										<option value="2">调料</option>
-										<option value="3">其他</option>
-								</select>
+									<div class="form-group">
+											<lable class="control-lable">材料类型:</lable>
+												<select class="form-control" name="seasSelect" id="seasSelect" style="width: 145px">
+														<option selected="selected" value="0">主料</option>
+														<option value="1">配料</option>
+														<option value="2">调料</option>
+														<option value="3">其他</option>
+												</select>
+									</div>
 							</td>
+							<td class="col-md-offset-1">
+									<div class="form-group col-md-offset-1">
+											<lable class="control-lable">菜品备注:</lable>
+											<input  type="text"  class="form-control" name="seasMsg" id="seasMsg"  min="0" placeholder="备注" onkeyup="value=value.replace(/[^\u4E00-\u9FA5]/g,'')" />
+									</div>
+							</td>
+							</div>
 						</tr>
-					</div>
-					<div class="form-group">
-						<tr id="sMsg">
-							<td style="width:79px;text-align: center;padding-top: 13px;">菜品备注:</td>
-							<td><input  type="text"  class="form-control" name="seasMsg" id="seasMsg"  min="0" placeholder="备注" onkeyup="value=value.replace(/[^\u4E00-\u9FA5]/g,'')" /></td>
-						</tr>
-					</div>
-			</form>
+					</table>
+				</form>
 			 </div>
 		 	 <div class="modal-footer">
                <button type="button" class="btn btn-default" data-dismiss="modal" onclick="$('#foolseasMenu')[0].reset();">关闭</button>

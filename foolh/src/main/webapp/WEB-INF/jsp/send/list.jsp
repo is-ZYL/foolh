@@ -193,6 +193,6 @@
 	<script src="static/ace/js/date-time/bootstrap-datepicker.js"></script>
 	<!--提示框-->
 	<script type="text/javascript" src="static/js/jquery.tips.js"></script>
-		<script type="text/javascript" src="static/js/myjs/order/orderList.js"></script>
+	<script type="text/javascript" src="static/js/myjs/jianyi/jianyi.js"></script>
 </body>
 </html>

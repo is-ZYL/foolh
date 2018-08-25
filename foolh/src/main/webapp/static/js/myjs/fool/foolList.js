@@ -13,6 +13,7 @@ var list = []; //菜品list数据
 var diag;//弹窗
 var foolseas= [];//所有材料信息
 var foolIdBySeas;//材料id
+var foolIdByCheck;//菜品id  方便查询
 //设置关键字搜索初始默认值 关键字，菜品创建时间，菜品类型（公共/私有），菜品ID，店铺ID
 var keywords="", created="", is_check="", foolId=0,foolShopId=0;
 
@@ -317,6 +318,7 @@ methods:{
 		 };
 		 diag.show();
 	},checkFoolSeasByFoolId:function(id){
+		foolIdByCheck = id;
 		checkFoolSeasByFoolId(id);
 	},showImgTitle:function(id){
 		$.ajax({
@@ -385,7 +387,7 @@ function checkFoolSeasByFoolId(id){
 				 foolseas.foolseasList = data;
 			}
 		},error:function(){
-			layer.msg("查询菜品异常！！！ 请稍后重试", {icon: 6});
+			layer.msg("查询菜品材料异常！！！ 请稍后重试", {icon: 5});
 		}
 		
 	})
@@ -524,7 +526,7 @@ function addFoolseas(){
 				$('#foolseasMenu')[0].reset();
 				$("#addSeasModal").modal("hide");
 				$("#seasModal").modal("show");
-				
+				checkFoolSeasByFoolId(foolIdByCheck);
 			},error:function(){
 				layer.msg("服务器异常", {icon: 6});
 			}

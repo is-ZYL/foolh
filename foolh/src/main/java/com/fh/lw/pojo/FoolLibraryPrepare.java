@@ -14,7 +14,11 @@ public class FoolLibraryPrepare extends BasePojo {
 	@Id
 	private Long id;// id主键
 	private Long foolId;// 菜品id
+	private Long shopId;// 店铺id
+	private String shopTitle;// 店铺名称
+	private String foolTitle;// 菜品名
 	private String prepAddUserId;// 添加准备的用户id
+	private String prepAddUserName;// 添加准备的用户名称
 	private Date prepTime;// 准备的时间，可以明天，后天等（准备的菜品使用时间）
 	private Integer prepNum;// 准备的份数
 	private String prepMsg;// 准备的说明
@@ -76,11 +80,44 @@ public class FoolLibraryPrepare extends BasePojo {
 		this.status = status;
 	}
 
+	public String getFoolTitle() {
+		return foolTitle;
+	}
+
+	public void setFoolTitle(String foolTitle) {
+		this.foolTitle = foolTitle;
+	}
+
+	public String getPrepAddUserName() {
+		return prepAddUserName;
+	}
+
+	public void setPrepAddUserName(String prepAddUserName) {
+		this.prepAddUserName = prepAddUserName;
+	}
+
+	public String getShopTitle() {
+		return shopTitle;
+	}
+
+	public void setShopTitle(String shopTitle) {
+		this.shopTitle = shopTitle;
+	}
+
+	public Long getShopId() {
+		return shopId;
+	}
+
+	public void setShopId(Long shopId) {
+		this.shopId = shopId;
+	}
+
 	@Override
 	public String toString() {
-		return "FoolLibraryPrepare [id=" + id + ", foolId=" + foolId + ", prepAddUserId=" + prepAddUserId
-				+ ", prepTime=" + prepTime + ", prepNum=" + prepNum + ", prepMsg=" + prepMsg + ", status=" + status
-				+ "]";
+		return "FoolLibraryPrepare [id=" + id + ", foolId=" + foolId + ", shopId=" + shopId + ", shopTitle=" + shopTitle
+				+ ", foolTitle=" + foolTitle + ", prepAddUserId=" + prepAddUserId + ", prepAddUserName="
+				+ prepAddUserName + ", prepTime=" + prepTime + ", prepNum=" + prepNum + ", prepMsg=" + prepMsg
+				+ ", status=" + status + "]";
 	}
 
 }

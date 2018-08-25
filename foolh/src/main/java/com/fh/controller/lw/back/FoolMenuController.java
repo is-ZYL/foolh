@@ -1,5 +1,6 @@
 package com.fh.controller.lw.back;
 
+import java.util.ArrayList;
 import java.util.Date;
 
 import javax.servlet.http.HttpSession;
@@ -37,6 +38,7 @@ import com.fh.lw.service.HelpService;
 import com.fh.lw.service.JinyanService;
 import com.fh.lw.service.RedisService;
 import com.fh.lw.service.UserWxService;
+import com.fh.lw.utils.Layui;
 import com.fh.util.Const;
 import com.github.pagehelper.PageInfo;
 
@@ -127,6 +129,23 @@ public class FoolMenuController extends BaseController {
 			FoolLibraryMenu resultFm = this.foolLibraryMenuService.queryByfoolTitle(fm);
 			// 查看
 			return ResponseEntity.ok(resultFm);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		// 出错500
+		return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+	}
+	
+	
+	@RequestMapping(value = "getFoolById", method = RequestMethod.GET)
+	public ResponseEntity<Layui> getFoolById(FoolLibraryMenu f) {
+		try {
+			FoolLibraryMenu resultFm = this.foolLibraryMenuService.queryOne(f);
+			ArrayList<FoolLibraryMenu> list = new ArrayList<>();
+			list.add(resultFm);
+			Layui layui = Layui.data(1l,list );
+			// 查看
+			return ResponseEntity.ok(layui);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -234,9 +253,8 @@ public class FoolMenuController extends BaseController {
 	}
 	
 	/**
-	 * 根据id查询菜品信息 并进入编辑页面
-	 * 
-	 * @param id
+	 * 查看菜品小图
+	 * @param fm
 	 * @return
 	 */
 	@RequestMapping("/getFoolImgTitleByid")

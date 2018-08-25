@@ -3,6 +3,7 @@ var pathName = window.document.location.pathname;
 var projectName = pathName.substring(0, pathName.substr(1).indexOf('/') + 1);
 
 // 初始化所有数据
+var pageInfo ={};
 var page = 1;
 var rows = 10;
 var type = 100;
@@ -343,6 +344,7 @@ var menuList = new Vue({
 			diag.show();
 		},
 		getFoolListByShopId : function(id) {
+			var _this = this;
 			// 利用bootstrap的modal和layer结合展现菜品数据 实时更新数据
 			$("#shopFoolModal").modal("show");
 			layui.use('table', function() {
@@ -356,8 +358,10 @@ var menuList = new Vue({
 					, {field : 'foolTitle',title : '菜品名',minWidth : 120,offset : 'auto'}
 					, {field : 'foolMakeTime',title : '制作时间/分钟',minWidth : 120,sort : true,offset : 'auto'}
 					, {field : 'foolPrice',title : '价格/元',minWidth : 120,sort : true,offset : 'auto'}
-					, {field : 'created',title : '创建时间',minWidth : 120,sort : true,offset : 'auto'}
-					, {field : 'updated',title : '更新时间',minWidth : 100,sort : true,offset : 'auto'}
+					, {field : 'created',title : '创建时间',minWidth : 120,sort : true,offset : 'auto',templet: function(obj){
+		                  return _this.dateFormat(obj.created)}}
+					, {field : 'updated',title : '更新时间',minWidth : 100,sort : true,offset : 'auto',templet: function(obj){
+		                  return _this.dateFormat(obj.updated)}}
 					, {field : 'userName',title : '菜品添加用户',minWidth : 130,offset : 'auto'}
 					, {field : 'foolMsg',title : '菜品备注',minWidth : 120,offset : 'auto'} 
 					] ]

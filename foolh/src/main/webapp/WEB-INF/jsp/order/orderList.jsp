@@ -102,13 +102,13 @@
 												</label>
 											</td>
 											<td class='center'>{{ser.id }}</td>
-											<td class='center'>{{ser.foolId }} </td>
+											<td class='center'><a class="text-primary" @click="checkFoolInfo(ser.foolId)">{{ser.foolTitle }}</a> </td>
 											<td class='center'>{{ser.prepNum }} </td>
 											<td calss="center" style=" max-width:100px;overflow:hidden;text-overflow:ellipsis;white-space: nowrap;" @click.prevent="showTextIfOut($event)">{{ ser.prepMsg == null ? "无":ser.prepMsg}}</td>
-											<td calss="center" style="text-align: center;"><span>{{ time(ser.created) }}</span></td>
-											<td calss="center" style="text-align: center;"><span>  {{ time(ser.prepTime) }}</span></td>
-											<td calss="center" style="text-align: center;"><a class="glyphicon glyphicon-eye-open"  @click="checkUserByID(ser.prepAddUserId)" title="点我查看用户信息"></a></td>
-											<td calss="center" style="text-align: center;"><a class="glyphicon glyphicon-eye-open" title="查看店铺信息"></a></td>
+											<td calss="center" style="text-align: center;">{{ FormatTime(ser.created) }}</td>
+											<td calss="center" style="text-align: center;">{{ FormatTime(ser.prepTime) }}</td>
+											<td calss="center" style="text-align: center;"><a class="text-primary"  @click="checkUserByID(ser.prepAddUserId)" title="点我查看用户信息">{{ser.prepAddUserName}}</a></td>
+											<td calss="center" style="text-align: center;"><a class="text-primary" @click="checkShopByID(ser.shopId)" title="查看店铺信息">{{ser.shopTitle}}</a></td>
 											<!-- 审核状态 -->
 											<td calss="center" style="text-align: center;width:60px" v-if="ser.status == 1" @click="changeOrderStatus(ser.status,ser.id,$event)"><a class="btn btn-mini btn-primary" title="更改审核状态">已配送</a></td>
 											<td calss="center" style="text-align: center;width:60px"  v-if="ser.status == 0" @click="changeOrderStatus(ser.status,ser.id,$event)"><a class="btn btn-mini btn-danger"  title="更改审核状态">未配送</a></td>
@@ -156,26 +156,95 @@
 
 	</div>
 
-<!-- 私房菜列表的modal --> 
+<!-- 菜品详情的modal --> 
 <div class="modal fade "  id="shopFoolModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" >
-	<div class="modal-dialog " style="width:850px;overflow:auto; ">
+	<div class="modal-dialog " style="width:1015px;overflow:auto; ">
 		<div class="modal-content">
 		 <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                <h4 class="modal-title" id="myModalLabel">私房菜列表</h4>
+                <h4 class="modal-title" id="myModalLabel">菜品详情</h4>
          </div>
 			<div class="modal-body">
-				<table id="demo" lay-filter="test" ></table>	
+				<table class="layui-hide" id="demo" lay-filter="test" ></table>	
+				<script type="text/html" id="barDemo">
+    	    		 <a class="btn btn-primary btn-mini" lay-event="checkFoolSeas">查看材料</a>
+				</script>
 				</div>
 		 	 <div class="modal-footer">
                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
-               <!-- <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addSeasModal" onclick="addFoolSeasView()">添加材料</button> -->
+           	 </div>
+		</div>
+	</div>
+</div>	
+<!-- 店铺详情的modal --> 
+<div class="modal fade "  id="shopModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" >
+	<div class="modal-dialog " style="width:935px;overflow:auto; ">
+		<div class="modal-content">
+		 <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="myModalLabel">店铺详情</h4>
+         </div>
+			<div class="modal-body">
+				<table class="layui-hide" id="shop" lay-filter="shopData" ></table>	
+				</div>
+		 	 <div class="modal-footer">
+               <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
            	 </div>
 		</div>
 	</div>
 </div>	
 
 	
+
+<!-- 材料列表的modal --> 
+<div class="modal fade bs-example-modal-sm"  id="seasModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" >
+	<div class="modal-dialog ">
+		<div class="modal-content">
+		 <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="myModalLabel">材料列表</h4>
+         </div>
+			<div class="modal-body">
+				<table id="dynamic-table"
+					class="table table-striped table-bordered table-hover">
+					<thead>
+						<tr>
+							<th class="center" style="width: 50px;">序号</th>
+							<th class='center'>材料名称</th>
+							<th class='center'>材料类型</th>
+							<th class='center'>重量</th>
+							<th class='center'>创建时间</th>
+							<th class='center'>更新时间</th>
+							<th class='center'>备注</th>
+						</tr>
+					</thead>
+					<tbody id="seasList">
+						<!-- 开始循环 -->
+							<tr v-cloak v-for="seas in foolseasList">
+								<td class='center'>{{seas.id}}</td>
+								<td class="center">{{seas.seasTitle }}</td>
+								<td class="center">
+										<!-- 0：主料，1.配料，2.调料，3.其它搭配的 --> 
+										<span class="red" v-if="seas.seasSelect ==0">主料</span>
+										<span v-if="seas.seasSelect ==1" >配料</span>
+										<span v-if="seas.seasSelect ==2">调料</span>
+										<span v-if="seas.seasSelect ==3">其他</span> 
+								</td>
+								<td calss="center" style="text-align: center;">{{seas.seasWeigetKg}}kg/{{seas.seasWeigetCatty}} 斤</td>
+								<td calss="center" style="text-align: center;"><span>{{ dateFormat(seas.created)}}</span></td>
+								<td calss="center" style="text-align: center;"><span>{{ dateFormat(seas.updated)}}</span></td>
+								<td calss="center" style="text-align: center;">{{seas.seasMsg == null?"无":seas.seasMsg}}</td>
+							</tr>
+
+					</tbody>
+				</table>
+				</div>
+		 	 <div class="modal-footer">
+               <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+           	 </div>
+		</div>
+	</div>
+</div>	
 	
 
 
@@ -201,6 +270,6 @@
 	<script src="static/ace/js/date-time/bootstrap-datepicker.js"></script>
 	<!--提示框-->
 	<script type="text/javascript" src="static/js/jquery.tips.js"></script>
-		<script type="text/javascript" src="static/js/myjs/order/orderList.js"></script>
+	<script type="text/javascript" src="static/js/myjs/order/orderList.js"></script>
 </body>
 </html>

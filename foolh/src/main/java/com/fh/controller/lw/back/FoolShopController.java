@@ -1,5 +1,6 @@
 package com.fh.controller.lw.back;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.HttpSession;
@@ -146,7 +147,7 @@ public class FoolShopController extends BaseController {
 	 * @return
 	 */
 	@RequestMapping(value = "getShopLists", method = RequestMethod.GET)
-	public ResponseEntity<EasyUIResult> getShopList(@RequestParam(value = "page", defaultValue = "1") Integer page,
+	public ResponseEntity<EasyUIResult> getShopLists(@RequestParam(value = "page", defaultValue = "1") Integer page,
 			@RequestParam(value = "rows", defaultValue = "20") Integer rows, @RequestParam("type") Integer type) {
 		try {
 			PageInfo<FoolShop> list = this.foolShopService.getShopLists(page, rows, type);
@@ -248,6 +249,28 @@ public class FoolShopController extends BaseController {
 		try {
 			PageInfo<FoolLibraryMenu> list = this.foolLibraryMenuService.queryPageListByWhere(page, limit, fm);
 			Layui layui = Layui.data(list.getTotal(), list.getList());
+			// 查看
+			return ResponseEntity.ok(layui);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		// 出错500
+		return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+	}
+	
+	/**
+	 * 根据店铺id查询该店铺的信息
+	 * 
+	 * @param shop
+	 * @return
+	 */
+	@RequestMapping(value = "getShopById", method = RequestMethod.GET)
+	public ResponseEntity<Layui> getShopById(FoolShop f,@RequestParam Integer limit,@RequestParam Integer page) {
+		try {
+			f  = this.foolShopService.queryOne(f);
+			ArrayList<FoolShop> list = new ArrayList<>();
+			list.add(f);
+			Layui layui = Layui.data(1l, list);
 			// 查看
 			return ResponseEntity.ok(layui);
 		} catch (Exception e) {

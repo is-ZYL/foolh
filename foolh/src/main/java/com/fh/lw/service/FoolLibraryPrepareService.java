@@ -56,7 +56,7 @@ public class FoolLibraryPrepareService extends BaseService<FoolLibraryPrepare> {
 
 	public PageInfo<FoolLibraryPrepare> getFoolLibraryPrepareByKeywordsAndOtherInfo(String[] allInfo) {
 
-		if ("".equals(allInfo[3]) && "".equals(allInfo[4]) && "".equals(allInfo[5])) {
+		if ("".equals(allInfo[3]) && "".equals(allInfo[4]) && "".equals(allInfo[5])&& "".equals(allInfo[6])&& "".equals(allInfo[7])&& "".equals(allInfo[8])) {
 			return this.flps.getListMenu(Integer.parseInt(allInfo[0]), Integer.parseInt(allInfo[1]));
 		} else {
 			Example example = new Example(FoolLibraryPrepare.class);
@@ -74,23 +74,19 @@ public class FoolLibraryPrepareService extends BaseService<FoolLibraryPrepare> {
 			}
 			// 用户名进行查找
 			if (!"".equals(allInfo[5])) {
-				criteria.andLike("userName", "%" + allInfo[5] + "%");
-			}
-			// 为空则说明查询全部类型
-			if (!"".equals(allInfo[4])) {
-				criteria.andEqualTo("propIsCheck", allInfo[4]);
+				criteria.andLike("prepAddUserName", "%" + allInfo[5] + "%");
 			}
 			// 配送时间
 			if (!"".equals(allInfo[6])) {
-				criteria.andLike("prepTime", "%" + allInfo[5] + "%");
+				criteria.andLike("prepTime", "%" + allInfo[6] + "%");
 			}
 			// 状态
 			if (!"".equals(allInfo[7])) {
-				criteria.andEqualTo("status",  allInfo[7]);
+				criteria.andEqualTo("status",allInfo[7]);
 			}
 			// 创建时间
 			if (!"".equals(allInfo[8])) {
-				criteria.andLike("created", "%" + allInfo[5] + "%");
+				criteria.andLike("created", "%" + allInfo[8] + "%");
 			}
 			example.setOrderByClause("created DESC");
 			List<FoolLibraryPrepare> list = this.fMapper.selectByExample(example);

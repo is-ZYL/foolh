@@ -3,10 +3,12 @@ var pathName = window.document.location.pathname;
 var projectName = pathName.substring(0, pathName.substr(1).indexOf('/') + 1);
 
 // 初始化所有数据
+var pageInfo ={};
 var page = 1;
 var rows = 10;
 var type = 100;
 var total = 0;
+var foolIdBySeas;
 var list = []; // 店铺list数据
 var diag;// 弹窗    prepTime userName shopTitle foolTitle
 // 设置关键字搜索初始默认值 店铺名，店铺创建时间，店铺类型，店铺ID，店铺老板名称/手机号
@@ -345,8 +347,74 @@ var menuList = new Vue({
 				layer.close(_this.index);
 				_this.i=!_this.i;
 			}
-		},time:function(a){
-			time(a);
+		},FormatTime:function(a){
+			return time(a);
+		},checkFoolInfo:function(foolId){
+			foolIdBySeas =foolId;
+			var _this = this;
+			// 利用bootstrap的modal和layer结合展现菜品数据 实时更新数据
+			$("#shopFoolModal").modal("show");
+			layui.use('table', function() {
+				let table = layui.table;
+				table.render({
+					elem : '#demo',
+					url : projectName+ '/fool/getFoolById?id=' + foolId // 数据接口
+					,page : false // 开启分页
+					,cols : [ [ // 表头
+					{field : 'id',title : 'ID',minWidth : 50,sort : true,fixed : 'left',offset : 'auto'}
+					, {field : 'foolTitle',title : '菜品名',minWidth : 120,offset : 'auto'}
+					, {field : 'foolMakeTime',title : '制作时间/分钟',minWidth : 120,sort : true,offset : 'auto'}
+					, {field : 'foolPrice',title : '价格/元',minWidth : 120,sort : true,offset : 'auto'}
+					, {field : 'created',title : '创建时间',minWidth : 120,sort : true,offset : 'auto',templet: function(obj){
+		                  return _this.dateFormat(obj.created)}}
+					, {field : 'updated',title : '更新时间',minWidth : 100,sort : true,offset : 'auto',templet: function(obj){
+		                  return _this.dateFormat(obj.updated)}}
+					, {field : 'userName',title : '菜品添加用户',minWidth : 120,offset : 'auto'}
+					, {field : 'foolMsg',title : '菜品备注',minWidth : 120,offset : 'auto'} 
+					,{field:'right', title: '材料', minWidth:100,toolbar:"#barDemo",offset : 'auto'}
+					] ]
+					,limit : 10// 每页显示条数
+				});
+				 //添加点击事件
+				table.on("tool(test)",function(obj){
+					 var data = obj.data;
+					 if(obj.event === "checkFoolSeas"){
+						checkSeas();
+					 }	
+				 })
+			});
+		},checkShopByID:function(shopId){//查看店铺信息
+			var _this = this;
+			// 利用bootstrap的modal和layer结合展现菜品数据 实时更新数据
+			$("#shopModal").modal("show");
+			layui.use('table', function() {
+				let table = layui.table;
+				table.render({
+					elem : '#shop',
+					url : projectName+ '/foolshop/getShopById?id=' + shopId // 数据接口
+					,page : false // 开启分页
+					,cols : [ [ // 表头
+					{field : 'id',title : 'ID',minWidth : 50,sort : true,fixed : 'left',offset : 'auto'}
+					, {field : 'shopTitle',title : '店铺名',minWidth : 120,offset : 'auto'}
+					, {field : 'shopBossName',title : '店铺老板',minWidth : 120,sort : true,offset : 'auto'}
+					, {field : 'shopPhone',title : '联系方式',minWidth : 120,sort : true,offset : 'auto'}
+					, {field : 'shopAddress',title : '店铺地址',minWidth : 120,sort : true,offset : 'auto'}
+					, {field : 'shopMsg',title : '店铺介绍',minWidth : 120,sort : true,offset : 'auto'}
+					, {field : 'created',title : '创建时间',minWidth : 120,sort : true,offset : 'auto',templet: function(obj){
+		                  return _this.dateFormat(obj.created)}}
+					, {field : 'shopType',title : '店铺类别',minWidth : 120,offset : 'auto',templet:function(obj){
+						//1.饭店，2. 蔬菜配送，3.水果4.调料干杂，5. 水产，6.海鲜，7.其它 默认0
+						  switch (obj.shopType) { 
+						  case 1: return "饭店"; break;case 2: return "蔬菜配送"; break; 
+						  case 3: return "水果"; break; case 4: return "调料干杂"; break; 
+						  case 5: return "水产"; break; case 6: return "海鲜"; break;
+						  case 7: return "其它"; break; 
+						  }
+					}}
+					] ]
+					,limit : 10// 每页显示条数
+				});
+			});
 		}
 	}
 
@@ -394,6 +462,53 @@ function changeSearchType() {
 		shopTitle = $("#shopTitle").val().length == 0 ? "" : $("#shopTitle").val();
 		gotoByAjax(page, rows, type);
 	}
+
+}
+
+
+
+var foolseas = new Vue({
+	el: '#seasModal',
+	data:{
+		foolseasList:[],
+	},methods:{
+	//   时间格式化
+	 	dateFormat:function(time) {
+		    var date=new Date(time);
+		    var year=date.getFullYear();
+		    /* 在日期格式中，月份是从0开始的，因此要加0
+		     * 使用三元表达式在小于10的前面加0，以达到格式统一  如 09:11:05
+		     * */
+		    var month= date.getMonth()+1<10 ? "0"+(date.getMonth()+1) : date.getMonth()+1;
+		    var day=date.getDate()<10 ? "0"+date.getDate() : date.getDate();
+		    var hours=date.getHours()<10 ? "0"+date.getHours() : date.getHours();
+		    var minutes=date.getMinutes()<10 ? "0"+date.getMinutes() : date.getMinutes();
+		    var seconds=date.getSeconds()<10 ? "0"+date.getSeconds() : date.getSeconds();
+		    // 拼接
+		    return year+"-"+month+"-"+day+" "+hours+":"+minutes+":"+seconds;
+		}
+	}
+})
+
+
+function checkSeas(){
+	//将用户点击获取到的id保存  方便进行添加操作
+	$.ajax({
+		url: projectName+'/foolseas/getFoolSeasListByFoolId?foolId='+foolIdBySeas,
+		type:"get",
+		success:function(data){
+			if (data.length == 0) {
+				$("#msgModal").modal("show");
+			}else{
+				$("#seasModal").modal("show");
+				 foolseas.foolseasList = data;
+			}
+		},error:function(){
+			layer.msg("查询菜品材料异常！！！ 请稍后重试", {icon: 5});
+		}
+		
+	})
+	
 
 }
 /**
