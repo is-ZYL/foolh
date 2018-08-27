@@ -59,7 +59,7 @@ body {
 										</tr>
 
 										<!-- 菜品小图回显 -->
-										<tr id="foolImgViews" >
+										<tr id="foolImgViews" style="display: none">
 											<td style="width:79px;text-align: right;padding-top: 13px;"></td>
 											<td>
 												<center>
@@ -74,15 +74,21 @@ body {
 											<td><input  type="number" class="form-control" name="foolMakeTime" id="foolMakeTime" min="0" placeholder="单位：分钟" onkeyup="value=value.replace(/[^\d{1,}\.\d{1,}|\d{1,}]/g,'')"  /></td>
 										</tr>
 										
+										
 										<tr>
-											<td style="width:79px;text-align: right;padding-top: 13px;"> 菜品单价 </td>
-											<td><input type="number" class="form-control" name="foolPrice" id="foolPrice"  placeholder="单位：元" min="0" onkeyup="value=value.replace(/[^\d{1,}\.\d{1,}|\d{1,}]/g,'')"  /></td>
+											<td style="width:79px;text-align: right;padding-top: 13px;"> 菜品类型 </td>
+											<td>
+												<select class="col-xs-10 col-sm-5 form-control" name="foolType" id="foolType">
+
+												</select>
+											</td>
 										</tr>
 										
 										<tr>
-											<td style="width:79px;text-align: right;padding-top: 13px;"> 菜品备注 </td>
-											<td><input type="text" class="form-control" name="foolMsg" id="foolMsg"  placeholder="请填写菜品备注"  /></td>
+											<td style="width:79px;text-align: right;padding-top: 13px;">制作方法 </td>
+											<td><input type="text" class="form-control" name="foolMsg" id="foolMsg"  placeholder="请填写菜品制作方法"  /></td>
 										</tr>
+										
 										
 										
 										

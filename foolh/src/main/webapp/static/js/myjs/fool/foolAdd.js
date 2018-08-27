@@ -3,12 +3,10 @@ var pathName = window.document.location.pathname;
 var projectName = pathName.substring(0, pathName.substr(1).indexOf('/') + 1);
 var layer = layui.layer; //定义layer框架对象
 $(function() {
-	// 将图片部分内容隐藏
-	$("#foolImgViews").hide();
-
 	trShowOrHidden(arr, oldType);
 	// 获取所有店铺信息
 	getShopList();
+	getFoolType();
 	// 还原菜品名称边框颜色
 	$("#foolTitle").css("border", "1px solid #d5d5d5");
 
@@ -481,4 +479,25 @@ function removeByValue(arr, attr, value) {// 数组，属性，属性值
 			break;
 		}
 	}
+}
+/**
+ * 获取菜品类型
+ */	
+function getFoolType() {
+	        var index = layer.load();
+	        $.ajax({
+	            url: projectName + '/fool/getFoolType',
+	            type: 'get',
+	            success: function (result) {
+	                layer.close(index);
+	                // 将查询出来的菜品类型进行遍历插入到foolType选项栏中
+	                $.each(result, function (n, value) {
+	                    $("#foolType").append(
+	                        $("<option></option>").text(value.type).val(value.id));
+	                })
+	            },
+	            error: function () {
+	                layer.msg('获取所有菜品类型失败， 请稍后重试！！！', {icon: 6});
+	            }
+	        })
 }

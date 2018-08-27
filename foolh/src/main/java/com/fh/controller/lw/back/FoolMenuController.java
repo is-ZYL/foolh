@@ -1,7 +1,7 @@
 package com.fh.controller.lw.back;
 
 import java.util.ArrayList;
-import java.util.Date;
+import java.util.List;
 
 import javax.servlet.http.HttpSession;
 
@@ -23,12 +23,14 @@ import com.fh.entity.system.User;
 import com.fh.lw.pojo.FoolLibraryMenu;
 import com.fh.lw.pojo.FoolLibrarySeas;
 import com.fh.lw.pojo.FoolMenuAllInfo;
+import com.fh.lw.pojo.FoolMenuType;
 import com.fh.lw.service.FoolAndUserService;
 import com.fh.lw.service.FoolLibraryMenuService;
 import com.fh.lw.service.FoolLibraryPrepareCreateService;
 import com.fh.lw.service.FoolLibraryPrepareService;
 import com.fh.lw.service.FoolLibrarySeasService;
 import com.fh.lw.service.FoolMenuService;
+import com.fh.lw.service.FoolMenuTypeService;
 import com.fh.lw.service.FoolPrepareCreateService;
 import com.fh.lw.service.FoolPrepareService;
 import com.fh.lw.service.FoolSeasService;
@@ -88,9 +90,11 @@ public class FoolMenuController extends BaseController {
 	private FoolSeasService foolSeasService;
 	@Autowired
 	private FoolUserLogService foolUserLogService;
+	@Autowired
+	private FoolMenuTypeService fts;
 
 	/**
-	  *   通过关键字搜索菜品库里获取菜品 以及调料
+	 * 通过关键字搜索菜品库里获取菜品 以及调料
 	 * 
 	 * @param page     页码
 	 * @param rows     每页显示条数
@@ -136,6 +140,7 @@ public class FoolMenuController extends BaseController {
 
 	/**
 	 * 通过id查询菜品信息
+	 * 
 	 * @param f
 	 * @return
 	 */
@@ -156,7 +161,8 @@ public class FoolMenuController extends BaseController {
 	}
 
 	/**
-	 *  菜品添加
+	 * 菜品添加
+	 * 
 	 * @param f
 	 * @param session
 	 * @return
@@ -209,6 +215,7 @@ public class FoolMenuController extends BaseController {
 
 	/**
 	 * 菜品批量删除
+	 * 
 	 * @param ids
 	 * @return
 	 */
@@ -237,6 +244,7 @@ public class FoolMenuController extends BaseController {
 
 	/**
 	 * 根据id查询菜品信息 并进入编辑页面
+	 * 
 	 * @param foolMenuID
 	 * @param model
 	 * @return
@@ -255,6 +263,7 @@ public class FoolMenuController extends BaseController {
 
 	/**
 	 * 查看菜品小图
+	 * 
 	 * @param fm
 	 * @return
 	 */
@@ -273,6 +282,7 @@ public class FoolMenuController extends BaseController {
 
 	/**
 	 * 根据id更新菜品信息
+	 * 
 	 * @param fl
 	 * @return
 	 */
@@ -302,6 +312,23 @@ public class FoolMenuController extends BaseController {
 			this.foolLibrarySeasService.saveSelective(fm);
 			// 查看
 			return ResponseEntity.status(HttpStatus.CREATED).build();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		// 出错500
+		return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+	}
+
+	/**
+	 * 获取菜品类型列表
+	 * 
+	 * @return
+	 */
+	@RequestMapping(value = "getFoolType", method = RequestMethod.GET)
+	public ResponseEntity<List<FoolMenuType>> getFoolType() {
+		try {
+			List<FoolMenuType> list = this.fts.getFoolTypeList();
+			return ResponseEntity.ok(list);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
