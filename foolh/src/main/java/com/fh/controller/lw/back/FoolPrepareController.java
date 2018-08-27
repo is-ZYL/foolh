@@ -142,9 +142,11 @@ public class FoolPrepareController extends BaseController {
 	@RequestMapping(value = "delOrder", method = RequestMethod.POST)
 	public ResponseEntity<Void> delOrder(FoolLibraryPrepare f) {
 		try {
-			if (this.foolLibraryPrepareService.deleteByWhere(f) > 0)
+			if (this.foolLibraryPrepareService.deleteByWhere(f) > 0) {
 				return ResponseEntity.status(HttpStatus.OK).build();
-			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+			} else {
+				return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

@@ -79,9 +79,9 @@ public class JianyiController extends BaseController {
 	private FoolUserLogService foolUserLogService;
 
 	/**
-	 * 
 	 * 获取所有的建议
 	 * 
+	 * @param allInfo
 	 * @return
 	 */
 	@RequestMapping(value = "getJianyiList", method = RequestMethod.GET)
@@ -100,6 +100,7 @@ public class JianyiController extends BaseController {
 	/**
 	 * 修改建议状态
 	 * 
+	 * @param jianyi
 	 * @return
 	 */
 	@RequestMapping(value = "changeJianyiStatus", method = RequestMethod.POST)
@@ -119,6 +120,7 @@ public class JianyiController extends BaseController {
 	/**
 	 * 批量删除建议数据
 	 * 
+	 * @param ids
 	 * @return
 	 */
 	@RequestMapping(value = "delJianyis", method = RequestMethod.POST)
@@ -138,6 +140,7 @@ public class JianyiController extends BaseController {
 	/**
 	 * 删除建议数据
 	 * 
+	 * @param jianyi
 	 * @return
 	 */
 	@RequestMapping(value = "delJianyi", method = RequestMethod.POST)

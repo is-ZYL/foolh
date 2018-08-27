@@ -103,14 +103,15 @@ public class FoolSeasController extends BaseController {
 	/**
 	 * 添加调料
 	 * 
-	 * @param fm
+	 * @param fs
+	 * @param session
 	 * @return
 	 */
 	@RequestMapping(value = "addFoolSeasLibraryByMenuId", method = RequestMethod.POST)
-	public ResponseEntity<Void> addFoolSeasByMenuId(FoolLibrarySeas fs,HttpSession session) {
+	public ResponseEntity<Void> addFoolSeasByMenuId(FoolLibrarySeas fs, HttpSession session) {
 		try {
 			User user = (User) session.getAttribute(Const.SESSION_USER);
-			fs.setSeasWeigetCatty(fs.getSeasWeigetKg()*2);
+			fs.setSeasWeigetCatty(fs.getSeasWeigetKg() * 2);
 			FoolLibraryMenu fm = this.foolLibraryMenuService.queryById(fs.getFoolId());
 			fs.setFoolTitle(fm.getFoolTitle());
 			fs.setSeasAddUserId(user.getUSER_ID());
@@ -127,28 +128,27 @@ public class FoolSeasController extends BaseController {
 	/**
 	 * 根据foolID查询所有材料
 	 * 
-	 * @param fm
+	 * @param f
 	 * @param model
 	 * @return
 	 */
 	@RequestMapping(value = "getFoolSeasListByFoolId", method = RequestMethod.GET)
 	public ResponseEntity<List<FoolLibrarySeas>> getFoolSeasListByFoolId(FoolLibrarySeas f, Model model) {
 		try {
-		List<FoolLibrarySeas> list = this.foolLibrarySeasService.getSeasListByMenuId(f);
-		model.addAttribute("foolLibrarySeasList", list);
-		return ResponseEntity.ok(list);
-	} catch (Exception e) {
-		e.printStackTrace();
-	}
-	// 出错500
-	return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+			List<FoolLibrarySeas> list = this.foolLibrarySeasService.getSeasListByMenuId(f);
+			model.addAttribute("foolLibrarySeasList", list);
+			return ResponseEntity.ok(list);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		// 出错500
+		return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
 	}
 
-	
 	/**
 	 * 查询菜品相关的材料名 判断是否重复
 	 * 
-	 * @param foolTitle
+	 * @param foolSeas
 	 * @return
 	 */
 	@RequestMapping(value = "getFoolSeasLibraryTitle", method = RequestMethod.GET)
@@ -163,18 +163,18 @@ public class FoolSeasController extends BaseController {
 		// 出错500
 		return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
 	}
+
 	/**
-	 * 查询菜品相关的材料名 判断是否重复
-	 * 
-	 * @param foolTitle
+	 * 根据菜品id删除指定材料
+	 * @param foolSeas
 	 * @return
 	 */
 	@RequestMapping(value = "deleteFoolseasByid", method = RequestMethod.GET)
 	public ResponseEntity<List<FoolLibrarySeas>> deleteFoolseasByid(FoolLibrarySeas foolSeas) {
 		try {
-			
-			 this.foolLibrarySeasService.deleteById(foolSeas.getId());
-			 List<FoolLibrarySeas> fs =  this.foolLibrarySeasService.queryListByWhereInfoASC(foolSeas, "seas_select");
+
+			this.foolLibrarySeasService.deleteById(foolSeas.getId());
+			List<FoolLibrarySeas> fs = this.foolLibrarySeasService.queryListByWhereInfoASC(foolSeas, "seas_select");
 			// 查看
 			return ResponseEntity.ok(fs);
 		} catch (Exception e) {

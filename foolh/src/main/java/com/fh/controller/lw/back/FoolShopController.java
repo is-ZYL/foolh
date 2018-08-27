@@ -91,9 +91,8 @@ public class FoolShopController extends BaseController {
 	/**
 	 * 添加字段不为空的店铺
 	 * 
-	 * @param page
-	 * @param rows
-	 * @param type
+	 * @param f
+	 * @param session
 	 * @return
 	 */
 	@RequestMapping(value = "addShop", method = RequestMethod.POST)
@@ -120,9 +119,7 @@ public class FoolShopController extends BaseController {
 	/**
 	 * 查询店铺列表
 	 * 
-	 * @param page
-	 * @param rows
-	 * @param type
+	 * @param allInfo
 	 * @return
 	 */
 	@RequestMapping(value = "getShopList", method = RequestMethod.GET)
@@ -183,7 +180,7 @@ public class FoolShopController extends BaseController {
 	/**
 	 * 店铺批量删除
 	 * 
-	 * @param id
+	 * @param ids
 	 * @return
 	 */
 	@RequestMapping(value = "DeleteShops", method = RequestMethod.GET)
@@ -203,7 +200,8 @@ public class FoolShopController extends BaseController {
 	/**
 	 * 根据id查询店铺信息 并进入编辑页面
 	 * 
-	 * @param id
+	 * @param shopId
+	 * @param model
 	 * @return
 	 */
 	@RequestMapping("/foolShopMenuEdit")
@@ -240,7 +238,9 @@ public class FoolShopController extends BaseController {
 	/**
 	 * 根据店铺id查询该店铺的所有私房菜信息
 	 * 
-	 * @param shop
+	 * @param fm
+	 * @param page
+	 * @param limit
 	 * @return
 	 */
 	@RequestMapping(value = "getFoolListByShopId", method = RequestMethod.GET)
@@ -257,17 +257,19 @@ public class FoolShopController extends BaseController {
 		// 出错500
 		return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
 	}
-	
+
 	/**
 	 * 根据店铺id查询该店铺的信息
 	 * 
-	 * @param shop
+	 * @param f
+	 * @param limit
+	 * @param page
 	 * @return
 	 */
 	@RequestMapping(value = "getShopById", method = RequestMethod.GET)
-	public ResponseEntity<Layui> getShopById(FoolShop f,@RequestParam Integer limit,@RequestParam Integer page) {
+	public ResponseEntity<Layui> getShopById(FoolShop f, @RequestParam Integer limit, @RequestParam Integer page) {
 		try {
-			f  = this.foolShopService.queryOne(f);
+			f = this.foolShopService.queryOne(f);
 			ArrayList<FoolShop> list = new ArrayList<>();
 			list.add(f);
 			Layui layui = Layui.data(1l, list);
@@ -306,11 +308,12 @@ public class FoolShopController extends BaseController {
 	}
 
 	/**
-	 * 根据店铺id其他类型的店铺方便进行绑定
+	 * 根据店铺id其他类型的店铺以便进行绑定
 	 * 
 	 * @param fShop
 	 * @param page
 	 * @param limit
+	 * @param keyword
 	 * @return
 	 */
 	@RequestMapping(value = "getBindShopListByShopId", method = RequestMethod.GET)
@@ -334,8 +337,8 @@ public class FoolShopController extends BaseController {
 	/**
 	 * 根据绑定店铺的id与被绑定的id店铺进行绑定
 	 * 
-	 * @param oldId 绑定id
-	 * @param newId 被绑定id
+	 * @param oldId
+	 * @param newId
 	 * @return
 	 */
 
@@ -378,6 +381,7 @@ public class FoolShopController extends BaseController {
 
 	/**
 	 * 改变店铺的审核状态
+	 * 
 	 * @param shopStatus
 	 * @param id
 	 * @return

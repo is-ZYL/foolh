@@ -90,20 +90,18 @@ public class FoolMenuController extends BaseController {
 	private FoolUserLogService foolUserLogService;
 
 	/**
-	 * 通过关键字搜索菜品库里获取菜品 以及调料
+	  *   通过关键字搜索菜品库里获取菜品 以及调料
 	 * 
 	 * @param page     页码
 	 * @param rows     每页显示条数
 	 * @param type     1. 公共菜品 2. 饭店菜品
-	 * @param model
 	 * @param created  创建时间
 	 * @param is_check 菜品类型 私有 公共 全部
 	 * @param keywords 关键字 可通过id 菜品名 添加用户名 进行搜索
 	 * @return
 	 */
 	@RequestMapping(value = "getFoolMenuLibraryList", method = RequestMethod.GET)
-	public ResponseEntity<PageInfo> getFoolMenuLibraryList(
-			@RequestParam("allInfo") String [] allInfo) {
+	public ResponseEntity<PageInfo> getFoolMenuLibraryList(@RequestParam("allInfo") String[] allInfo) {
 		try {
 			PageInfo<FoolLibraryMenu> list = this.foolMenuService.getListMenuByKeywordsAndOtherInfo(allInfo);
 			// 查看
@@ -135,15 +133,19 @@ public class FoolMenuController extends BaseController {
 		// 出错500
 		return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
 	}
-	
-	
+
+	/**
+	 * 通过id查询菜品信息
+	 * @param f
+	 * @return
+	 */
 	@RequestMapping(value = "getFoolById", method = RequestMethod.GET)
 	public ResponseEntity<Layui> getFoolById(FoolLibraryMenu f) {
 		try {
 			FoolLibraryMenu resultFm = this.foolLibraryMenuService.queryOne(f);
 			ArrayList<FoolLibraryMenu> list = new ArrayList<>();
 			list.add(resultFm);
-			Layui layui = Layui.data(1l,list );
+			Layui layui = Layui.data(1l, list);
 			// 查看
 			return ResponseEntity.ok(layui);
 		} catch (Exception e) {
@@ -154,9 +156,9 @@ public class FoolMenuController extends BaseController {
 	}
 
 	/**
-	 * 菜品添加
-	 * 
-	 * @param fm
+	 *  菜品添加
+	 * @param f
+	 * @param session
 	 * @return
 	 */
 	@RequestMapping(value = "addFoolMenuLibrary", method = RequestMethod.POST)
@@ -207,8 +209,7 @@ public class FoolMenuController extends BaseController {
 
 	/**
 	 * 菜品批量删除
-	 * 
-	 * @param id
+	 * @param ids
 	 * @return
 	 */
 	@RequestMapping(value = "DeletefoolMenuLibrarys", method = RequestMethod.GET)
@@ -236,8 +237,8 @@ public class FoolMenuController extends BaseController {
 
 	/**
 	 * 根据id查询菜品信息 并进入编辑页面
-	 * 
-	 * @param id
+	 * @param foolMenuID
+	 * @param model
 	 * @return
 	 */
 	@RequestMapping("/foolMenuEdit")
@@ -251,7 +252,7 @@ public class FoolMenuController extends BaseController {
 		}
 		return "/fool/edit";
 	}
-	
+
 	/**
 	 * 查看菜品小图
 	 * @param fm
@@ -272,8 +273,7 @@ public class FoolMenuController extends BaseController {
 
 	/**
 	 * 根据id更新菜品信息
-	 * 
-	 * @param id
+	 * @param fl
 	 * @return
 	 */
 	@RequestMapping(value = "updateFoolMenu", method = RequestMethod.POST)

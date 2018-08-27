@@ -36,16 +36,17 @@ import oracle.net.aso.h;
 
 /**
  * 菜品
+ * 
  * @author yuanyuana
  *
- * 2018年7月28日 下午1:33:03
+ *         2018年7月28日 下午1:33:03
  */
 
 @CrossOrigin(origins = "http://127.0.0.1", maxAge = 3600)
 @Controller
 @RequestMapping("help")
-public class HelpController extends BaseController{
-	
+public class HelpController extends BaseController {
+
 	@Autowired(required = true)
 	private RedisService rService;
 	private static final ObjectMapper MAPPER = new ObjectMapper();
@@ -81,9 +82,9 @@ public class HelpController extends BaseController{
 	private FoolUserLogService foolUserLogService;
 
 	/**
-	 * 
 	 * 获取所有的建议
 	 * 
+	 * @param allInfo
 	 * @return
 	 */
 	@RequestMapping(value = "getHelpList", method = RequestMethod.GET)
@@ -99,10 +100,9 @@ public class HelpController extends BaseController{
 		return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
 	}
 
-
 	/**
 	 * 修改建议状态
-	 * 
+	 * @param help
 	 * @return
 	 */
 	@RequestMapping(value = "changeHelpStatus", method = RequestMethod.POST)
@@ -121,7 +121,7 @@ public class HelpController extends BaseController{
 
 	/**
 	 * 批量删除建议数据
-	 * 
+	 * @param ids
 	 * @return
 	 */
 	@RequestMapping(value = "delHelpis", method = RequestMethod.POST)
@@ -141,6 +141,7 @@ public class HelpController extends BaseController{
 	/**
 	 * 删除建议数据
 	 * 
+	 * @param help
 	 * @return
 	 */
 	@RequestMapping(value = "delHelp", method = RequestMethod.POST)
