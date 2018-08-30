@@ -30,7 +30,9 @@ function save() {
 		var shopImg = imgUrldd;
 		var shopPhone = $("#shopPhone").val();
 		var shopBossName = $("#shopBossName").val();
-		var foolShop = {"shopTitle":shopTitle,"shopMsg":shopMsg,"shopAddress":shopAddress,"shopType":shopType,"shopImg":shopImg,"shopPhone":shopPhone,"shopBossName":shopBossName};
+		var shopSendTime = $("#shopSendTime_1").val()+"-"+$("#shopSendTime_2").val();
+		var foolShop = {"shopTitle":shopTitle,"shopMsg":shopMsg,"shopAddress":shopAddress,"shopType":shopType,"shopImg":shopImg,"shopPhone":shopPhone,"shopBossName":shopBossName,"shopSendTime":shopSendTime};
+		
 		$.ajax({
 			url : projectName + '/foolshop/addShop',
 			type : 'POST',
@@ -42,6 +44,7 @@ function save() {
 				layer.msg('店铺添加成功', {icon: 6});
 				formRestInfo("#menuForm");
 				trShowOrHidden(arr, "hidden");
+				$("#addSendTime").css("display","none");
 				// 关闭添加页面
 				top.Dialog.close();
 			},
@@ -215,6 +218,16 @@ function checkInputTextIsNull() {
 		$("#shopType").focus();
 		isReturn = true;
 	}
+	if($("#shopType").val() != 0 &&$("#shopType").val() != 1 && $("#shopSendTime_1").val() == "" && $("#shopSendTime_2").val() == ""){
+		$("#shopSendTime").tips({
+			side : 3,
+			msg : '请选择店铺送货时间',
+			bg : '#AE81FF',
+			time : 4
+		});
+		$("#shopSendTime").focus();
+		isReturn = true;
+	}
 	
 	if (isReturn)
 		return false;
@@ -237,5 +250,17 @@ function removeByValue(arr, attr, value) {// 数组，属性，属性值
 			arr.splice(j, 1);
 			break;
 		}
+	}
+}
+/**
+ * 店铺设置送货时间
+ * @param value
+ * @returns
+ */
+function setSendTime(value){
+	if (value != 0 && value != 1) {
+		$("#addSendTime").css("display","table-row");
+	}else{
+		$("#addSendTime").css("display","none");
 	}
 }

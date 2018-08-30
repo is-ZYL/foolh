@@ -4,6 +4,7 @@ var projectName=pathName.substring(0,pathName.substr(1).indexOf('/')+1);
 
 var a=0;//判断是处于编辑状态还是查看状态  1、查看； 2、编辑；
 var foolTitleIsOK= false; //判断修改的菜品名称是否合格  true可以更改
+var foolTypeList=[];
 $(function () {
 /**
  * 将表单中的数据设置为禁止编辑
@@ -18,13 +19,14 @@ $("#foolTitle").focus(function(){
 })
 //获取所有店铺信息
 getShopList();
+getFoolType();
 })
 
 $(top.hangge());
 
 //返回
 function goback(id){
-	window.location.href="<%=basePath%>address.do?id="+id;
+	window.location.href=projectName+"/address.do?id="+id;
 }
 
 /**
@@ -76,7 +78,6 @@ function getShopList(){
         	//将查询出来的店铺进行遍历插入到foolShopId选项栏中
         	 $.each(result.rows,function(n,value) {
         		$("#foolShopId").append($("<option></option>").text("店铺名: " +value.shopTitle + " 店铺id: " + value.id).val(value.id));
-        			
         		})
         },error:function(){
 			alert("获取店铺异常， 请稍后重试！！！");
@@ -117,4 +118,40 @@ function checkfoolTitle(foolTitle){
 			})
 	}
 	}
+
+/**
+ * 获取菜品类型
+ */	
+function getFoolType() {
+	        var index = layer.load();
+	        $.ajax({
+	            url: projectName + '/fool/getFoolType',
+	            type: 'get',
+	            success: function (result) {
+	            	window.foolTypeList = result;
+	                layer.close(index);
+	                // 将查询出来的菜品类型进行遍历插入到foolType选项栏中
+	                $.each(result, function (n, value) {
+							$("#foolType").append($("<option></option>").text(value.type).val(value.id));
+	                })
+	            },
+	            error: function () {
+	                layer.msg('获取所有菜品类型失败， 请稍后重试！！！', {icon: 6});
+	            }
+	        })
+}
+//$("#foolType").append($("<option></option>").text(val).val(id));
+function getFoolTypeVal(id){// 根据菜品类型id获取当前类型的值
+	var val;
+	if (foolTypeList.length >0) {
+		$.each(menuList.foolType,function(a,b){
+			if (b.id === id) {
+				val = b.type;
+				return;
+			}
+		})
+	} 
+	return val;
+}
+
 

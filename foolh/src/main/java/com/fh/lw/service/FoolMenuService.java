@@ -119,13 +119,13 @@ public class FoolMenuService extends BaseService<FoolMenu> {
 	}
 	
 	public PageInfo<FoolLibraryMenu> getListMenuByKeywordsAndOtherInfo(String [] allInfo) {
-		if ("".equals(allInfo[3]) && "".equals(allInfo[4])&& "".equals(allInfo[5])&& "0".equals(allInfo[6])&& "0".equals(allInfo[7])) {
+		if ("".equals(allInfo[3]) && "".equals(allInfo[4])&& "".equals(allInfo[5])&& "0".equals(allInfo[6])&& "0".equals(allInfo[7])&& "".equals(allInfo[8])) {
 			return this.fms.getListMenu(Integer.parseInt(allInfo[0]), Integer.parseInt(allInfo[1]),Integer.parseInt(allInfo[2]));
 		}else {
 			Example example = new Example(FoolLibraryMenu.class);
 			PageHelper.startPage(Integer.parseInt(allInfo[0]), Integer.parseInt(allInfo[1]));
 			Criteria criteria = example.createCriteria();
-			//["page":1,"rows":10,"type":100,"keywords":keywords,"is_check":is_check,"created":created,"foolId":foolId,"foolShopId":foolShopId];
+			//["page":1,"rows":10,"type":100,"keywords":keywords,"is_check":is_check,"created":created,"foolId":foolId,"foolShopId":foolShopId,"fool_type":fool_type];
 			// 菜名进行查找
 			if (!"".equals(allInfo[3])) {
 				criteria.andLike("foolTitle", "%" + allInfo[3] + "%");
@@ -145,6 +145,10 @@ public class FoolMenuService extends BaseService<FoolMenu> {
 			//菜品创建时间
 			if (!"".equals(allInfo[5])) {
 				criteria.andLike("created", "%" +allInfo[5]+ "%");
+			}
+			//菜品类型
+			if (!"".equals(allInfo[8])) {
+				criteria.andEqualTo("foolType", allInfo[8]);
 			}
 			example.setOrderByClause("created ASC");
 			List<FoolLibraryMenu> list = this.foolMapper.selectByExample(example);

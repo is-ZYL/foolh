@@ -18,7 +18,7 @@ var foolIdByCheck;//菜品id  方便查询
 var keywords="", created="", is_check="", foolId=0,foolShopId=0;
 
 $(function(){
-	$("#ImgModal").modal("hide");
+	getFoolType();
 })
 
 
@@ -181,6 +181,8 @@ function gotoPage() {
 	var pageNum = $("#toGoPage").val();
 	//判断输入的内容是否合格  不能是当前页，为空 ，以及大于最后一页的数
 	if (pageNum != ""  && $.trim(pageNum).legth != 0 && pageNum != pageInfo.pageNum  && pageNum <= pageInfo.lastPage) {
+		page = pageNum;
+		menuList.page = pageNum;
 		gotoByAjax(pageNum,rows,type);
 	}else{
 		layer.msg("请选择正确的页码！！!", {icon: 6});
@@ -211,7 +213,8 @@ function gotoByAjax(page, rows, type) {
 		foolId=0; keywords="";created="";
 	}
 	is_check =$("#is_check").val();
-	var allInfo = [page,rows,type,keywords,is_check,created,foolId,foolShopId];
+	fool_type =$("#fool_type").val();
+	var allInfo = [page,rows,type,keywords,is_check,created,foolId,foolShopId,fool_type];
 	/*
 	 * 第二种办法 ：相对有点臃肿 不灵活
 	var url;
@@ -233,10 +236,12 @@ function gotoByAjax(page, rows, type) {
 			menuList.list = d.list;
 			menuList.rows=rows;
 			menuList.page=page;
-			menuList.total=d.total;;
-			pageInfo = d;
-			total = d.total;
-			list = d.list;
+			menuList.total=d.total;
+			window.page = page;
+			window.rows=rows;
+			window.pageInfo = d;
+			window.total = d.total;
+			window.list = d.list;
 			build_page_nav(d);
 			$("#changeCount").val(rows);
 		},
@@ -254,11 +259,13 @@ var menuList =	new Vue({
 		 rows:10,
 		 type:100,
 		 total:0,
-		 i:true
+		 i:true,
+		 foolType:[]
 	},
 created:function(){
 	var _this=this;
 		gotoByAjax(_this.page, _this.rows, _this.type);
+		getFoolTypeAllData();
 		$("#changeCount").val(rows);
 },
 methods:{
@@ -285,11 +292,11 @@ methods:{
 						type:"get",
 						success:function(data){
 							//成功，刷新当前页面
-							window.location.reload();
+							 gotoByAjax(page, rows, type) 
 						},
 						error:function(){
 							("服务器异常，请稍后再试");
-							window.location.reload();
+							 gotoByAjax(page, rows, type) 
 						}
 					});
 				} 
@@ -363,6 +370,17 @@ methods:{
 			layer.close(_this.index);
 			_this.i=!_this.i;
 		}
+	},getFoolTypeVal:function(id){// 根据菜品类型id获取当前类型的值
+		var val;
+		if (menuList.foolType.length >0) {
+			$.each(menuList.foolType,function(a,b){
+				if (b.id === id) {
+					val = b.type;
+					return;
+				}
+			})
+		} 
+		return val;
 	}
 } 
 
@@ -577,3 +595,47 @@ function deleteFoolSeasByid(seasId){
 	})
 	
 }
+
+/**
+ * 获取菜品类型的所有类型
+ * @param seasId
+ * @returns
+ */
+function getFoolTypeAllData(){
+	$.ajax({
+		url:projectName+"/fool/getFoolType",
+		type:"get",
+		success:function(data){
+			$.each(data,function(a,b){
+				var val = {id:b.id,type:b.type};
+				menuList.foolType[a] = val;
+			})
+		},error:function(){
+			layer.msg("服务器异常！获取菜品类型失败", {icon: 5});
+		}
+	})
+	
+}
+
+/**
+ * 获取菜品类型
+ */	
+function getFoolType() {
+	        var index = layer.load();
+	        $.ajax({
+	            url: projectName + '/fool/getFoolType',
+	            type: 'get',
+	            success: function (result) {
+	                layer.close(index);
+	                // 将查询出来的菜品类型进行遍历插入到foolType选项栏中
+	                $.each(result, function (n, value) {
+	                    $("#fool_type").append(
+	                        $("<option></option>").text(value.type).val(value.id));
+	                })
+	            },
+	            error: function () {
+	                layer.msg('获取所有菜品类型失败， 请稍后重试！！！', {icon: 6});
+	            }
+	        })
+}
+

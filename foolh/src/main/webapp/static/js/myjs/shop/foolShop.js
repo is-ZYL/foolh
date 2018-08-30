@@ -209,17 +209,17 @@ function changeCount(value) {
 }
 /**
  * 跳转到指定页码去
- * 
  * @returns
  */
 function gotoPage() {
 	var pageNum = $("#toGoPage").val();
-	// 判断输入的内容是否合格 不能是当前页，为空 ，以及大于最后一页的数
-	if (pageNum != "" && $.trim(pageNum).legth != 0
-			&& pageNum != pageInfo.pageNum && pageNum <= pageInfo.lastPage) {
-		gotoByAjax(pageNum, rows, type);
-	} else {
-		layer.msg("请选择正确的页码！！!");
+	//判断输入的内容是否合格  不能是当前页，为空 ，以及大于最后一页的数
+	if (pageNum != ""  && $.trim(pageNum).legth != 0 && pageNum != pageInfo.pageNum  && pageNum <= pageInfo.lastPage) {
+		page = pageNum;
+		menuList.page = pageNum;
+		gotoByAjax(pageNum,rows,type);
+	}else{
+		layer.msg("请选择正确的页码！！!", {icon: 6});
 		$("#toGoPage").val("");
 	}
 }
@@ -498,6 +498,9 @@ var menuList = new Vue({
 				layer.close(_this.index);
 				_this.i=!_this.i;
 			}
+		},showImgTitle:function(shopImg){
+					$("#ImgModal").modal("show");
+					$("#shopImg").attr("src","/file/"+shopImg);
 		}
 	}
 

@@ -74,6 +74,11 @@ body {
 											<td><input  type="number" class="form-control" name="foolMakeTime" id="foolMakeTime" min="0" placeholder="单位：分钟" onkeyup="value=value.replace(/[^\d{1,}\.\d{1,}|\d{1,}]/g,'')"  /></td>
 										</tr>
 										
+											
+										<tr>
+											<td style="width:79px;text-align: right;padding-top: 13px;">菜品单价 </td>
+											<td><input  type="number" class="form-control" name="foolPrice" id="foolPrice" min="0" placeholder="单位：元" onkeyup="value=value.replace(/[^\d{1,}\.\d{1,}|\d{1,}]/g,'')"   /></td>
+										</tr>
 										
 										<tr>
 											<td style="width:79px;text-align: right;padding-top: 13px;"> 菜品类型 </td>
@@ -88,10 +93,7 @@ body {
 											<td style="width:79px;text-align: right;padding-top: 13px;">制作方法 </td>
 											<td><input type="text" class="form-control" name="foolMsg" id="foolMsg"  placeholder="请填写菜品制作方法"  /></td>
 										</tr>
-										
-										
-										
-										
+									
 										
 										<tr>
 											<td style="width:79px;text-align: center;padding-top: 13px;"> 店铺id</td>

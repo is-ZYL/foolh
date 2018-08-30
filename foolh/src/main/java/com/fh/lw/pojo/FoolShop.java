@@ -26,6 +26,7 @@ public class FoolShop extends BasePojo {
 	private Long songQitaShopId;// 饭店绑定的其他店id，默认为0:没有 表示是配送店',
 	private String songShopIdList;// 配送店绑定的店铺id，格式：3，4,5,6，7 逗号分隔
 	private Integer shopStatus;// 店铺审核状态  0未审核   1已审核
+	private String shopSendTime;// 店铺送货时间
 
 	
 	
@@ -159,6 +160,14 @@ public class FoolShop extends BasePojo {
 		this.songShopIdList = songShopIdList;
 	}
 
+	public String getShopSendTime() {
+		return shopSendTime;
+	}
+
+	public void setShopSendTime(String shopSendTime) {
+		this.shopSendTime = shopSendTime;
+	}
+
 	@Override
 	public String toString() {
 		return "FoolShop [id=" + id + ", shopAddUserId=" + shopAddUserId + ", shopTitle=" + shopTitle + ", shopImg="
@@ -166,8 +175,10 @@ public class FoolShop extends BasePojo {
 				+ ", shopBossName=" + shopBossName + ", shopPhone=" + shopPhone + ", songShuichanShopId="
 				+ songShuichanShopId + ", songShucaiShopId=" + songShucaiShopId + ", songGanzaShopId=" + songGanzaShopId
 				+ ", songHaixianShopId=" + songHaixianShopId + ", songQitaShopId=" + songQitaShopId
-				+ ", songShopIdList=" + songShopIdList + ", shopStatus=" + shopStatus + "]";
+				+ ", songShopIdList=" + songShopIdList + ", shopStatus=" + shopStatus + ", shopSendTime=" + shopSendTime
+				+ "]";
 	}
+
 
 
 

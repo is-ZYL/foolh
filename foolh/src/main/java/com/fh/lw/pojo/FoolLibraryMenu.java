@@ -15,6 +15,7 @@ public class FoolLibraryMenu extends BasePojo {
 	private String foolImgTitle;// 菜品小图
 	private Integer foolMakeTime;// 菜品制作时间
 	private Integer foolPrice;// 菜品价格
+	private Integer foolType;// 菜品类型id
 	private Integer foolIsShop;// 菜品是否有用户，1.公共大家都可以看，2.私有菜品
 	private String foolAddUserId;// 菜品上传的用户id
 	private Long foolShopId;// 菜品店铺id
@@ -102,13 +103,22 @@ public class FoolLibraryMenu extends BasePojo {
 		this.foolShopId = foolShopId;
 	}
 
+	public Integer getFoolType() {
+		return foolType;
+	}
+
+	public void setFoolType(Integer foolType) {
+		this.foolType = foolType;
+	}
+
 	@Override
 	public String toString() {
 		return "FoolLibraryMenu [id=" + id + ", foolTitle=" + foolTitle + ", foolImgTitle=" + foolImgTitle
-				+ ", foolMakeTime=" + foolMakeTime + ", foolPrice=" + foolPrice + ", foolIsShop=" + foolIsShop
-				+ ", foolAddUserId=" + foolAddUserId + ", foolShopId=" + foolShopId + ", userName=" + userName
-				+ ", foolMsg=" + foolMsg + "]";
+				+ ", foolMakeTime=" + foolMakeTime + ", foolPrice=" + foolPrice + ", foolType=" + foolType
+				+ ", foolIsShop=" + foolIsShop + ", foolAddUserId=" + foolAddUserId + ", foolShopId=" + foolShopId
+				+ ", userName=" + userName + ", foolMsg=" + foolMsg + "]";
 	}
+
 
 
 }

@@ -194,6 +194,16 @@ public abstract class BaseService<T extends BasePojo> {
 	public Integer deleteById(Long id) {
 		return this.mapper.deleteByPrimaryKey(id);
 	}
+	
+	/**
+	 * 根据主键删除记录
+	 * 
+	 * @param id
+	 * @return
+	 */
+	public Integer deleteById(Integer id) {
+		return this.mapper.deleteByPrimaryKey(id);
+	}
 
 	/**
 	 * 批量删除

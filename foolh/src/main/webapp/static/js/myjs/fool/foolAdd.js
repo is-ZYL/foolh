@@ -51,13 +51,15 @@ function save() {
 		var foolPrice = $("#foolPrice").val();
 		var foolShopId = $("#foolShopId").val();
 		var foolMsg = $("#foolMsg").val();
+		var foolType = $("#foolType").val();
 		var foolMenuInfo = {
 			"foolTitle" : foolTitle,
 			"foolMakeTime" : foolMakeTime,
 			"foolPrice" : foolPrice,
 			"foolShopId" : foolShopId,
 			"foolImgTitle" : imgUrldd,
-			"foolMsg" : foolMsg
+			"foolMsg" : foolMsg,
+			"foolType" : foolType
 		};
 		var f = {
 			"foolseasInfoArray" : foolseasInfoArray,

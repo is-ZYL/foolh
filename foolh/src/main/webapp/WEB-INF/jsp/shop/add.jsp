@@ -94,7 +94,7 @@ body {
 										<tr>
 											<td style="width:79px;text-align: center;padding-top: 13px;"> 店铺类型:</td>
 											<td>
-												<select class="col-xs-10 col-sm-5 form-control" name="shopType" id="shopType">
+												<select class="col-xs-10 col-sm-5 form-control" name="shopType" onchange="setSendTime(this.value)" id="shopType">
 											  		<option selected="selected" value="0">请选择店铺类型</option>
 											  		<option value="1">饭店</option>
 													<option value="2">蔬菜配送</option>
@@ -105,6 +105,11 @@ body {
 													<option value="7">其它</option>
 												</select>
 											</td>
+										</tr>
+										
+										<tr id="addSendTime" style="display: none">
+											<td style="width:79px;text-align: right;"> 送货时间: </td>
+											<td id="shopSendTime"><input style="height: 30px;text-align: center;" type="time" name="shopSendTime" id="shopSendTime_1" required/>  至   <input type="time" style="height: 30px;text-align: center;" name="shopSendTime" id="shopSendTime_2" required/></td>
 										</tr>
 										<tr>
 											<td style="text-align: center;" colspan="10">

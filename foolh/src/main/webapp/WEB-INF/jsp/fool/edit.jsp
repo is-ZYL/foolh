@@ -78,10 +78,19 @@
 											</td>
 											</tr>
 										</c:if>
+										<c:if test="${fm.foolType != null  }">
+											<tr>
+												<td style="width:79px;text-align:right;padding-top: 13px;">菜品类型:</td>
+												<td>
+													<select  class="col-xs-10 col-sm-5 form-control"  name="foolType" id="foolType" style="width:98%;">
+													</select>
+											</td>
+											</tr>
+										</c:if>
 										
 										<tr>
-											<td style="width:79px;text-align: right;padding-top: 13px;">菜品备注:</td>
-											<td><input type="text" name="foolMsg" id="foolMsg" value="${fm.foolMsg == null?'无': fm.foolMsg}"  placeholder="菜品备注" title="菜品备注" style="width:98%;"/></td>
+											<td style="width:79px;text-align: right;padding-top: 13px;">制作方法:</td>
+											<td><input type="text" name="foolMsg" id="foolMsg" value="${fm.foolMsg == null?'无': fm.foolMsg}"  placeholder="菜品制作方法" title="菜品备注" style="width:98%;"/></td>
 										</tr>
 										<tr>
 											<td style="text-align: center;" colspan="10">
@@ -107,11 +116,7 @@
 
 
 		<!-- 返回顶部 -->
-		<a href="#" id="btn-scroll-up"
-			class="btn-scroll-up btn btn-sm btn-inverse"> <i
-			class="ace-icon fa fa-angle-double-up icon-only bigger-110"></i>
-		</a>
-
+		<a href="#" id="btn-scroll-up" class="btn-scroll-up btn btn-sm btn-inverse"> <i class="ace-icon fa fa-angle-double-up icon-only bigger-110"></i></a>
 	</div>
 	<!-- /.main-container -->
 
@@ -136,37 +141,53 @@
 	<script type="text/javascript" src="static/js/jquery.tips.js"></script>
 	<script type="text/javascript" src="static/js/myjs/fool/foolEdit.js"></script>
 	<script type="text/javascript">
-			
-			//判断文本框是否更改 
-			function checkInfoIsChanged(){
-				/* $("#foolMenuUpdate input[name!='id']").bind('input propertychange', function() {  
-				    return true; 
-				}); */
-				
-				var foolTitle = $("#foolTitle").val();
-				var foolTitleByht = "${fm.foolTitle }";
-				
-				var foolPrice = $("#foolPrice").val();
-				var foolPriceByht = "${fm.foolPrice }";
-				
-				var foolMakeTime = $("#foolMakeTime").val();
-				var foolMakeTimeByht = "${fm.foolMakeTime }";
-				
-				var foolShopId = $("#foolShopId").val();
-				var foolShopIdByht = "${fm.foolShopId }";
-				
-				var foolMsg = $("#foolMsg").val();
-				var foolMsgByht = "${fm.foolMsg }";
-				
-				if(foolTitle == foolTitleByht && foolPrice ==foolPriceByht && foolMakeTime == foolMakeTimeByht && foolShopId == foolShopIdByht && foolMsg == foolMsgByht ){
-					alert("未更改任何数据！！！");
-					return false ;
-				}else{
-					return true;
+	
+	function getFoolTypeVal(id){// 根据菜品类型id获取当前类型的值
+		var val;
+		if (foolTypeList.length >0) {
+			$.each(menuList.foolType,function(a,b){
+				if (b.id === id) {
+					val = b.type;
+					return;
 				}
-				
-			}
-	</script>
+			})
+		} 
+		$("#foolType").append($("<option></option>").text(val).val(id));
+	}
+	$(function(){
+		getFoolTypeVal(${fm.foolType});	
+	})
+	
+	//判断文本框是否更改 
+	function checkInfoIsChanged(){
+		/* $("#foolMenuUpdate input[name!='id']").bind('input propertychange', function() {  
+		    return true; 
+		}); */
+		
+		var foolTitle = $("#foolTitle").val();
+		var foolTitleByht = "${fm.foolTitle }";
+		
+		var foolPrice = $("#foolPrice").val();
+		var foolPriceByht = "${fm.foolPrice }";
+		
+		var foolMakeTime = $("#foolMakeTime").val();
+		var foolMakeTimeByht = "${fm.foolMakeTime }";
+		
+		var foolShopId = $("#foolShopId").val();
+		var foolShopIdByht = "${fm.foolShopId }";
+		
+		var foolMsg = $("#foolMsg").val();
+		var foolMsgByht = "${fm.foolMsg }";
+		
+		if(foolTitle == foolTitleByht && foolPrice ==foolPriceByht && foolMakeTime == foolMakeTimeByht && foolShopId == foolShopIdByht && foolMsg == foolMsgByht ){
+			alert("未更改任何数据！！！");
+			return false ;
+		}else{
+			return true;
+		}
+		
+	}
+</script>
 
 </body>
 </html>

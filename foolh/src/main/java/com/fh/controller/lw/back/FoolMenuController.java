@@ -320,20 +320,57 @@ public class FoolMenuController extends BaseController {
 	}
 
 	/**
-	 * 获取菜品类型列表
-	 * 
-	 * @return
-	 */
-	@RequestMapping(value = "getFoolType", method = RequestMethod.GET)
-	public ResponseEntity<List<FoolMenuType>> getFoolType() {
-		try {
-			List<FoolMenuType> list = this.fts.getFoolTypeList();
-			return ResponseEntity.ok(list);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		// 出错500
-		return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
-	}
+     * 获取菜品类型列表
+     *
+     * @return
+     */
+    @RequestMapping(value = "getFoolType", method = RequestMethod.GET)
+    public ResponseEntity<List<FoolMenuType>> getFoolType() {
+        try {
+            List<FoolMenuType> list = this.fts.getFoolTypeList();
+            return ResponseEntity.ok(list);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        // 出错500
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+    }
 
+    /**
+     * 删除菜品类型
+     *
+     * @param id
+     * @return
+     */
+    @RequestMapping(value = "DeleteFoolType", method = RequestMethod.POST)
+    public ResponseEntity<Void> deleteFoolType(@RequestParam Integer id) {
+        try {
+            this.fts.deleteById(id);
+            return ResponseEntity.status(HttpStatus.CREATED).build();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        // 出错500
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+    }
+
+    /**
+     * 添加菜品类型
+     *
+     * @param type
+     * @return
+     */
+    @RequestMapping(value = "addFoolType", method = RequestMethod.POST)
+    public ResponseEntity<Void> addFoolType(FoolMenuType type) {
+        try {
+            this.fts.saveSelective(type);
+            return ResponseEntity.status(HttpStatus.CREATED).build();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        // 出错500
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+    }
+	
+	
 }

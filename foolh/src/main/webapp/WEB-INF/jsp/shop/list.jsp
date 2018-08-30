@@ -99,8 +99,9 @@
 											</th>
 											<th class="center" style="width: 50px;">序号</th>
 											<th class='center'>店铺名称</th>
-											<th class='center'>店铺老板/联系方式</th>
+											<th class='center'>店铺小图</th>
 											<th class='center'>店铺老板</th>
+											<th class='center'>联系方式</th>
 											<th class='center'>店铺地址</th>
 											<th class='center'>店铺介绍</th>
 											<th class='center'>创建时间</th>
@@ -122,8 +123,9 @@
 											</td>
 											<td class='center'>{{ser.id }}</td>
 											<td class='center'style=" max-width:100px;overflow:hidden;text-overflow:ellipsis;white-space: nowrap;" @click.prevent="showTextIfOut($event)">{{ser.shopTitle }} </td>
-											<td class='center' style=" max-width:100px;overflow:hidden;text-overflow:ellipsis;white-space: nowrap;" @click.prevent="showTextIfOut($event)">{{ser.shopBossName }} / {{ser.shopPhone }} </td>
-											<td class='center'>{{ser.shopBossName }}</td>
+											<td class='center'><a class="glyphicon glyphicon-eye-open"  @click="showImgTitle(ser.shopImg)"  title="点我查看店铺小图"></a></td>
+											<td class='center'>{{ser.shopBossName }} </td>
+											<td class='center'>{{ser.shopPhone }} </td>
 											<td class='center' style=" max-width:100px;overflow:hidden;text-overflow:ellipsis;white-space: nowrap;" @click="showTextIfOut($event)">{{ser.shopAddress }} </td>
 											<td calss="center" style=" max-width:100px;overflow:hidden;text-overflow:ellipsis;white-space: nowrap;" @click="showTextIfOut($event)">{{ ser.shopMsg == null ? "无":ser.shopMsg}} </td>
 											<td calss="center" style=" max-width:100px;overflow:hidden;text-overflow:ellipsis;white-space: nowrap;" @click.prevent="showTextIfOut($event)"><span> {{ dateFormat(ser.created)}}</span></td>
@@ -236,7 +238,7 @@
 		<div class="modal-content">
 			<div class="modal-body">
 			<!-- ser.foolImgTitle -->
-				<img alt="菜品小图" src="企业简介.png" style="width: 100%;height: 100%">
+				<img alt="店铺小图" src="" id="shopImg" style="width: 100%;height: 100%">
 			</div>
 		</div>
 	</div>

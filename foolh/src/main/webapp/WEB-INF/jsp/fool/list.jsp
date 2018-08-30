@@ -47,25 +47,6 @@
 									</span>
 									</div>
 								</td>
-								<!-- id查找
-								<td>
-									<div class="nav-search">
-									<span class="input-icon">
-										<input class="nav-search-input input-sm" autocomplete="off" id="foolId" type="number" name="foolId" min="1" value="" placeholder="这里输入菜品ID">
-										<i class="ace-icon fa fa-search nav-search-icon"></i>
-									</span>
-									</div>
-								</td>
-								创建日期
-								<td>
-									<div class="nav-search">
-									<span class="input-icon">
-										<input id="created"  class="form_datetime input-sm" data-date-format="yyyy-mm-dd hh:ii" style="border: 1px solid #6fb3e0;border-radius: 4px !important;" name="created"  placeholder="创建日期">
-										<i class="ace-icon fa fa-search nav-search-icon"></i>
-									</span>
-									</div>
-								</td>
-								 -->
 								<!-- 关键字类型 -->
 								<td style="vertical-align:top;padding-left:2px;">
 								 	<select class="nav-search-input" name="searchType" id="searchType" data-placeholder="关键字类型"  style="border: 1px solid #6fb3e0;border-radius: 4px !important;" onchange="changeSearchType();">
@@ -76,12 +57,18 @@
 									</select>
 								</td>
 								
-								<!-- 菜品类型 -->
 								<td style="vertical-align:top;padding-left:2px;">
 								 	<select class="nav-search-input" name="is_check" id="is_check" data-placeholder="请选择状态"  style="border: 1px solid #6fb3e0;border-radius: 4px !important;" onchange="gotoByAjax(page, rows,100);">
 										<option value="">全部</option>
 										<option value="1">公共菜品</option>
 										<option value="2">私有菜品</option>
+									</select>
+								</td>
+								<!-- 菜品类型 -->
+								<td style="vertical-align:top;padding-left:2px;">
+								 	<select class="nav-search-input" name="fool_type" id="fool_type" data-placeholder="请选择状态"  style="border: 1px solid #6fb3e0;border-radius: 4px !important;" onchange="gotoByAjax(page, rows,100);">
+										<option value="">全部</option>
+										
 									</select>
 								</td>
 								
@@ -107,11 +94,12 @@
 											<th class='center'>制作时间</th>
 											<th class='center'>单价</th>
 											<th class='center'>材料</th>
+											<th class='center'>绑定店铺</th>
 											<th class='center'>菜品类型</th>
 											<th class='center'>创建时间</th>
 											<th class='center'>更新时间</th>
 											<th class='center'>添加用户</th>
-											<th class='center'>菜品备注</th>
+											<th class='center'>制作方法</th>
 											<th class='center' style="width: 120px;">操作</th>
 										</tr>
 									</thead>
@@ -130,6 +118,7 @@
 											<td calss="center" style="text-align: center;">{{ser.foolPrice }}元</td>
 											<td calss="center" style="text-align: center;"><a class="glyphicon glyphicon-eye-open"  @click="checkFoolSeasByFoolId(ser.id)"  title="点我查看材料信息"></a></td>
 											<td calss="center" style="text-align: center;"><span>{{ser.foolIsShop == "1"?"公共菜品":"私有菜品 店铺id="+ser.foolShopId}}  </span></td>
+											<td calss="center" style="text-align: center;">{{getFoolTypeVal(ser.foolType)}}</td>
 											<td calss="center" style=" max-width:100px;overflow:hidden;text-overflow:ellipsis;white-space: nowrap;" @click.prevent="showTextIfOut($event)"><span> {{ dateFormat(ser.created)}}</span></td>
 											<td calss="center" style=" max-width:100px;overflow:hidden;text-overflow:ellipsis;white-space: nowrap;" @click.prevent="showTextIfOut($event)"><span> {{ dateFormat(ser.updated)}}</span></td>
 											<td calss="center" style="text-align: center;"><a class="glyphicon glyphicon-eye-open"  @click="checkUserByID(ser.foolAddUserId)" title="点我查看用户信息"></a></td>
