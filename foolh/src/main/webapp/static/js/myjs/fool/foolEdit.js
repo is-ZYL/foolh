@@ -128,12 +128,12 @@ function getFoolType() {
 	            url: projectName + '/fool/getFoolType',
 	            type: 'get',
 	            success: function (result) {
-	            	window.foolTypeList = result;
 	                layer.close(index);
 	                // 将查询出来的菜品类型进行遍历插入到foolType选项栏中
 	                $.each(result, function (n, value) {
-							$("#foolType").append($("<option></option>").text(value.type).val(value.id));
+						$("#foolType").append($("<option></option>").text(value.type).val(value.id));
 	                })
+	                $("#foolType").val($("#foolId").val());
 	            },
 	            error: function () {
 	                layer.msg('获取所有菜品类型失败， 请稍后重试！！！', {icon: 6});
@@ -153,5 +153,3 @@ function getFoolTypeVal(id){// 根据菜品类型id获取当前类型的值
 	} 
 	return val;
 }
-
-

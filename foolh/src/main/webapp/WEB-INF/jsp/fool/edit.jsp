@@ -39,6 +39,7 @@
 								<form action="" name="foolMenuUpdate" id="foolMenuUpdate" method="post">
 									<div id="zhongxin" style="padding-top: 13px;">
 									<input type="hidden" name="id" value="${fm.id }"  />
+									<input type="hidden" id="foolId" value="${fm.foolType }"  />
 									<table id="table_report" class="table table-striped table-bordered table-hover">
 										<tr>
 											<td style="width:79px;text-align: right;padding-top: 13px;">ID</td>
@@ -83,6 +84,7 @@
 												<td style="width:79px;text-align:right;padding-top: 13px;">菜品类型:</td>
 												<td>
 													<select  class="col-xs-10 col-sm-5 form-control"  name="foolType" id="foolType" style="width:98%;">
+													
 													</select>
 											</td>
 											</tr>
@@ -141,29 +143,8 @@
 	<script type="text/javascript" src="static/js/jquery.tips.js"></script>
 	<script type="text/javascript" src="static/js/myjs/fool/foolEdit.js"></script>
 	<script type="text/javascript">
-	
-	function getFoolTypeVal(id){// 根据菜品类型id获取当前类型的值
-		var val;
-		if (foolTypeList.length >0) {
-			$.each(menuList.foolType,function(a,b){
-				if (b.id === id) {
-					val = b.type;
-					return;
-				}
-			})
-		} 
-		$("#foolType").append($("<option></option>").text(val).val(id));
-	}
-	$(function(){
-		getFoolTypeVal(${fm.foolType});	
-	})
-	
 	//判断文本框是否更改 
 	function checkInfoIsChanged(){
-		/* $("#foolMenuUpdate input[name!='id']").bind('input propertychange', function() {  
-		    return true; 
-		}); */
-		
 		var foolTitle = $("#foolTitle").val();
 		var foolTitleByht = "${fm.foolTitle }";
 		
@@ -187,7 +168,7 @@
 		}
 		
 	}
-</script>
 
+</script>
 </body>
 </html>
