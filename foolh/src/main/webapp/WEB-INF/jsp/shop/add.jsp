@@ -70,10 +70,7 @@ body {
 											</td>
 										</tr>
 										
-										<tr>
-											<td style="width:79px;text-align: right;padding-top: 13px;"> 店铺地址: </td>
-											<td><input type="text" class="form-control" name="shopAddress" id="shopAddress"   /></td>
-										</tr>
+										
 										
 										<tr>
 											<td style="width:79px;text-align: right;padding-top: 13px;"> 老板姓名: </td>
@@ -111,6 +108,21 @@ body {
 											<td style="width:79px;text-align: right;"> 送货时间: </td>
 											<td id="shopSendTime"><input style="height: 30px;text-align: center;" type="time" name="shopSendTime" id="shopSendTime_1" required/>  至   <input type="time" style="height: 30px;text-align: center;" name="shopSendTime" id="shopSendTime_2" required/></td>
 										</tr>
+										
+										<tr>
+											<td style="width:79px;text-align: right;padding-top: 13px;"> 店铺地址: </td>
+											<td id="r-result">
+												<input type="text" class="form-control" name="shopAddress" id="shopAddress"  placeholder="请输入地点/可点击地图选择" /> 
+											 </td>
+										</tr>
+										<tr>
+											<td colspan="10000">
+												<div id="map_show"></div>
+											<div id="icon_header"></div>
+											<div id="searchResultPanel" style="display:none;"></div>
+											</td>
+										</tr>
+										
 										<tr>
 											<td style="text-align: center;" colspan="10">
 												<a class="btn btn-mini btn-primary" onclick="save();">保存</a>
@@ -163,5 +175,126 @@ body {
 	<script type="text/javascript" src="static/underscore-min.js"></script>
 	<script type="text/javascript" src="static/imgUrl.js"></script>
 	<script type="text/javascript" src="static/js/myjs/shop/shopAdd.js"></script>
+	<!--引入百度地图API-->
+<script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=iBM9rbzTH2dMZW7MbYMYmFgb"></script>
+ <script>
+ 	var point ;//地址经纬度
+ 	
+    function AddMap(){
+        //设置地图容器高度
+        var screenH=window.innerHeight;
+        var headerH=this.elById("icon_header").offsetHeight;
+        this.elById("map_show").style.height=screenH-headerH+"px";
+    }
+
+    /**
+     * @param el 地图初始化容器
+     * @param p  初始化坐标点
+     */
+    AddMap.prototype.init=function(el,p){
+        var point={
+            lng:116.404113,
+            lat:39.914965
+        };
+        if(p && p.lng && p.lat){
+            point.lng=p.lng;
+            point.lat=p.lat;
+        }
+        this.m = new BMap.Map(el);      //实例化地图
+        this.p = new BMap.Point(point.lng,point.lat);
+
+        this.m.enableContinuousZoom();    //启用地图惯性拖拽
+        this.m.enableScrollWheelZoom();   //启用滚轮放大缩小
+        this.m.centerAndZoom(this.p, 12);  //设置地图显示中间点、地图显示级别
+
+        this.addMaker(this.p);
+        this.search();               //搜索
+        this.getLocation();
+        this.getAdress();
+    };
+    var gc = new BMap.Geocoder();
+    //获取坐标点位置
+    AddMap.prototype.getLocation=function(){
+        var _this=this;
+        var confirm=this.elById("shopAddress");
+        confirm.addEventListener("click",function(e){
+            var makerPoint=_this.makerPoint();
+            gc.getLocation(makerPoint, function(rs){    
+                var addComp = rs.addressComponents;
+                $("#shopAddress").val(addComp.province + addComp.city + addComp.district + addComp.street + addComp.streetNumber);
+                alert(point);
+            });  
+        });
+    };
+    
+    //点击地图通过逆解析获取详细地址信息
+    AddMap.prototype.getAdress = function(){
+    	this.m.addEventListener("click", function(e){
+    		gc.getLocation(e.point, function(rs){    
+                var addComp = rs.addressComponents;
+                $("#shopAddress").val(addComp.province + addComp.city + addComp.district + addComp.street + addComp.streetNumber);
+                window.point = e.point.lng+","+e.point.lat; //保存经纬度
+                alert(point);
+            })
+    	});
+	}
+    AddMap.prototype.elById=function(id) {
+        return document.getElementById(id);
+    };
+
+    //添加坐标显示
+    AddMap.prototype.addMaker=function(location){
+        var mk = new BMap.Marker(location);
+        mk.enableDragging();        //marker可拖拽
+        mk.enableMassClear();
+        this.m.addOverlay(mk); //在地图中添加marker
+        this.makerPoint=function(){
+            return mk.getPosition(); //返回当前坐标
+        };
+
+    };
+
+    //搜索
+    AddMap.prototype.search=function(){
+        var _this=this;
+        var ac = new BMap.Autocomplete(    //建立一个自动完成的对象
+                {
+                    "input" : "shopAddress",
+                    "location" : _this.m
+                }
+        );
+        ac.addEventListener("onconfirm", function(e) {    //鼠标点击下拉列表后的事件
+            var _value = e.item.value;
+            myValue = _value.province +  _value.city +  _value.district +  _value.street +  _value.business;
+            _this.elById("searchResultPanel").innerHTML ="onconfirm<br />index = " + e.item.index + "<br />myValue = " + myValue;
+            _this.setPlace(_this.m);
+        });
+    };
+
+   
+    
+    //定位到具体位置
+    AddMap.prototype.setPlace=function(m){
+        var _this=this;
+        m.clearOverlays();    //清除地图上所有覆盖物
+        function myFun(){
+            var pp = local.getResults().getPoi(0).point;    //获取第一个智能搜索的结果
+            m.centerAndZoom(pp, 15);  //设置地图显示中间点、地图显示级别
+            _this.addMaker(pp);
+        }
+        var local = new BMap.LocalSearch(m, { //智能搜索
+            onSearchComplete: myFun
+        });
+        local.search(myValue);
+    };
+
+    var mapInclude=new AddMap();
+
+    //初始化地图
+    //需传入容器DOM（id），可传坐标点定位
+    mapInclude.init("map_show",{lng:104.072247,lat:30.663436});
+
+</script>
+
 </body>
  </html>

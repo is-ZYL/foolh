@@ -18,7 +18,7 @@ var foolIdByCheck;//菜品id  方便查询
 var keywords="", created="", is_check="", foolId=0,foolShopId=0;
 
 $(function(){
-	getFoolType();
+	
 })
 
 
@@ -265,6 +265,7 @@ var menuList =	new Vue({
 created:function(){
 	var _this=this;
 		gotoByAjax(_this.page, _this.rows, _this.type);
+		getFoolType();
 		getFoolTypeAllData();
 		$("#changeCount").val(rows);
 },
@@ -607,8 +608,9 @@ function getFoolTypeAllData(){
 		type:"get",
 		success:function(data){
 			$.each(data,function(a,b){
-				var val = {id:b.id,type:b.type};
-				menuList.foolType[a] = val;
+				  // this.gc[0] ={name:'lisi',age:22} //这样直接修改不能被vue监听到
+			      // Vue.set(this.gc,0,{name:'lisi',age:22}) //这样就能被vue监控到，更新视图  
+				 Vue.set(menuList.foolType,a,{id:b.id,type:b.type});
 			})
 		},error:function(){
 			layer.msg("服务器异常！获取菜品类型失败", {icon: 5});
@@ -621,12 +623,10 @@ function getFoolTypeAllData(){
  * 获取菜品类型
  */	
 function getFoolType() {
-	        var index = layer.load();
 	        $.ajax({
 	            url: projectName + '/fool/getFoolType',
 	            type: 'get',
 	            success: function (result) {
-	                layer.close(index);
 	                // 将查询出来的菜品类型进行遍历插入到foolType选项栏中
 	                $.each(result, function (n, value) {
 	                    $("#fool_type").append(

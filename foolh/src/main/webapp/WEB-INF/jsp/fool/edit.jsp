@@ -160,7 +160,10 @@
 		var foolMsg = $("#foolMsg").val();
 		var foolMsgByht = "${fm.foolMsg }";
 		
-		if(foolTitle == foolTitleByht && foolPrice ==foolPriceByht && foolMakeTime == foolMakeTimeByht && foolShopId == foolShopIdByht && foolMsg == foolMsgByht ){
+		var foolType = $("#foolType").val();
+		var foolTypeByht = "${fm.foolType }";
+		
+		if(foolTitle == foolTitleByht && foolPrice ==foolPriceByht && foolMakeTime == foolMakeTimeByht && foolShopId == foolShopIdByht && foolMsg == foolMsgByht && foolTypeByht == foolType ){
 			alert("未更改任何数据！！！");
 			return false ;
 		}else{

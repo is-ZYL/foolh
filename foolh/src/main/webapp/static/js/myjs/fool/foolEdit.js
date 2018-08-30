@@ -140,16 +140,3 @@ function getFoolType() {
 	            }
 	        })
 }
-//$("#foolType").append($("<option></option>").text(val).val(id));
-function getFoolTypeVal(id){// 根据菜品类型id获取当前类型的值
-	var val;
-	if (foolTypeList.length >0) {
-		$.each(menuList.foolType,function(a,b){
-			if (b.id === id) {
-				val = b.type;
-				return;
-			}
-		})
-	} 
-	return val;
-}
